@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.gui.GuiGameContr">
+   <children>
+      <HBox prefHeight="700.0" prefWidth="900.0">
+         <children>
+            <AnchorPane fx:id="board" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="700.0">
+               <children>
+                  <ImageView fitHeight="700.0" fitWidth="700.0" onMouseClicked="#boardClicked" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/OOAD630.jpg" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="rookBlack1" fitHeight="79.0" fitWidth="80.0" layoutX="32.0" layoutY="32.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="knightBlack1" fitHeight="79.0" fitWidth="80.0" layoutX="112.0" layoutY="32.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="bishopBlack3" fitHeight="79.0" fitWidth="80.0" layoutX="191.0" layoutY="32.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="qeenBlack" fitHeight="79.0" fitWidth="80.0" layoutX="271.0" layoutY="32.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="kingBlack" fitHeight="79.0" fitWidth="80.0" layoutX="350.0" layoutY="32.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="bishopBlack2" fitHeight="79.0" fitWidth="80.0" layoutX="430.0" layoutY="32.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="knightBlack2" fitHeight="79.0" fitWidth="80.0" layoutX="509.0" layoutY="32.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="rookBlack2" fitHeight="79.0" fitWidth="80.0" layoutX="588.0" layoutY="32.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="pawnBlack1" fitHeight="79.0" fitWidth="80.0" layoutX="32.0" layoutY="112.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="pawnBlack2" fitHeight="79.0" fitWidth="80.0" layoutX="112.0" layoutY="112.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="pawnBlack3" fitHeight="79.0" fitWidth="80.0" layoutX="191.0" layoutY="112.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="pawnBlack4" fitHeight="79.0" fitWidth="80.0" layoutX="271.0" layoutY="112.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="pawnBlack5" fitHeight="79.0" fitWidth="80.0" layoutX="350.0" layoutY="112.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="pawnBlack6" fitHeight="79.0" fitWidth="80.0" layoutX="430.0" layoutY="112.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="pawnBlack7" fitHeight="79.0" fitWidth="80.0" layoutX="509.0" layoutY="112.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="pawnBlack8" fitHeight="79.0" fitWidth="80.0" layoutX="588.0" layoutY="112.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="pawnWhite1" fitHeight="79.0" fitWidth="80.0" layoutX="32.0" layoutY="509.0" onMouseClicked="#pawnWhite1OnClick" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/rook.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="pawnWhite2" fitHeight="79.0" fitWidth="80.0" layoutX="112.0" layoutY="509.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="pawnWhite3" fitHeight="79.0" fitWidth="80.0" layoutX="191.0" layoutY="509.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="pawnWhite4" fitHeight="79.0" fitWidth="80.0" layoutX="271.0" layoutY="509.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="pawnWhite5" fitHeight="79.0" fitWidth="80.0" layoutX="350.0" layoutY="509.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="pawnWhite6" fitHeight="79.0" fitWidth="80.0" layoutX="430.0" layoutY="509.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="pawnWhite7" fitHeight="79.0" fitWidth="80.0" layoutX="509.0" layoutY="509.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="pawnWhite8" fitHeight="79.0" fitWidth="80.0" layoutX="588.0" layoutY="509.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="rookWhite1" fitHeight="79.0" fitWidth="80.0" layoutX="32.0" layoutY="588.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="knightWhite1" fitHeight="79.0" fitWidth="80.0" layoutX="112.0" layoutY="588.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="bishopWhite1" fitHeight="79.0" fitWidth="80.0" layoutX="191.0" layoutY="588.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="queenWhite" fitHeight="79.0" fitWidth="80.0" layoutX="271.0" layoutY="588.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="kingWhite" fitHeight="79.0" fitWidth="80.0" layoutX="350.0" layoutY="588.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="bishopWhite2" fitHeight="79.0" fitWidth="80.0" layoutX="430.0" layoutY="588.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="knightWhite2" fitHeight="79.0" fitWidth="80.0" layoutX="509.0" layoutY="588.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="rookWhite2" fitHeight="79.0" fitWidth="80.0" layoutX="588.0" layoutY="588.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fitHeight="34.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true" />
+               </children>
+            </AnchorPane>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" />
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>
