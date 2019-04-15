@@ -1,14 +1,30 @@
 package sample.figures;
+import javafx.scene.image.ImageView;
 import sample.board.Field;
+
+
 public class Pawn implements Figure
 {
     private boolean isPawnWhite;
+    private boolean firstMovementDone;
+    private boolean isRemovingFigure;
     private Field actField;
+    private ImageView image;
 
-    public Pawn(boolean isWhite)
+
+    public Pawn(boolean isWhite, ImageView image)
     {
         this.isPawnWhite = isWhite;
+        this.firstMovementDone = false;
+        this.isRemovingFigure = false;
         this.actField = null;
+        this.image = image;
+
+    }
+
+    public ImageView getImage()
+    {
+        return this.image;
     }
 
     public boolean isWhite()
@@ -41,74 +57,116 @@ public class Pawn implements Figure
         return this.actField;
     }
 
-    public boolean move(Field moveTo)
+    public int move(Field moveTo)
     {
+        int flag = 1;
         if(this.actField == null)
-            return false;
+            return -1;
 
         int actCol = this.actField.getColPos();
         int actRow = this.actField.getRowPos();
-        Field.Direction checkDirection;
-        switch(isDirectionCorrect(actCol, actRow, moveTo))
-        {
-            case -1:
-                return false;
-            case 0:
-                return true;
-            case 1:
-                checkDirection = Field.Direction.D;
-                break;
-            case 2:
-                checkDirection = Field.Direction.U;
-                break;
-        }
+        int movetoCol = moveTo.getColPos();
+        int movetoRow = moveTo.getRowPos();
 
-        if(!moveTo.isEmpty())
-            return false;
+        if(actCol == movetoCol && actRow == movetoRow)
+            return -1;
+
+        if(!isMovementPossible(actCol, actRow, moveTo, movetoCol, movetoRow))
+            return -1;
+
+        if(this.isRemovingFigure)
+        {
+            Figure movetoFigure = moveTo.get();
+            moveTo.remove(movetoFigure);
+            this.isRemovingFigure = false;
+            flag = 2;
+        }
 
         this.actField.remove(this);
         moveTo.put(this);
-        return true;
+        this.firstMovementDone = true;
+        return flag;
     }
 
-    private short isDirectionCorrect(int col, int row, Field moveTo)
+    private boolean isMovementPossible(int actCol, int actRow, Field moveTo, int movetoCol, int movetoRow)
     {
-        if(col == moveTo.getColPos() && row == moveTo.getRowPos())
-        {
-            return 0;
-        }
-        else if (col == moveTo.getColPos())
-        {
-            if(Math.abs(moveTo.getRowPos()-this.actField.getRowPos())!=1)
-                return -1;
+        int colDiff = Math.abs(movetoCol-actCol);
+        int rowDiff = Math.abs(movetoRow-actRow);
 
-            if (this.isPawnWhite)
+        if (colDiff == 0)
+        {
+            if(!this.firstMovementDone)
             {
-                if (row < moveTo.getRowPos())
-                {
-                    return 1;       //check direction -> down from moveTO
-                }
-                else
-                {
-                    return -1;
-                }
+                if(rowDiff != 1 && rowDiff != 2)
+                    return false;
             }
             else
             {
-                if (row > moveTo.getRowPos())
-                {
-                    return 2;       //check direction -> up from moveTO
-                }
-                else
-                {
-                    return -1;
-                }
+                if(rowDiff != 1)
+                    return false;
             }
+
+
+            Field.Direction dir;
+            if (this.isPawnWhite)
+            {
+                if (!(actRow < movetoRow))
+                    return false;
+                dir = Field.Direction.U;
+            }
+            else
+            {
+                if (!(actRow > movetoRow))
+                    return false;
+                dir = Field.Direction.D;
+            }
+
+            if(!checkDirWithoutRemove(dir, rowDiff))
+                return false;
+        }
+        else if(colDiff==1)
+        {
+            if(rowDiff!=1)
+                return false;
+
+            if (this.isPawnWhite)
+            {
+                if (!(actRow < movetoRow))
+                    return false;
+            }
+            else
+            {
+                if (!(actRow > movetoRow))
+                    return false;
+            }
+
+            if(moveTo.isEmpty())
+                return false;
+
+            Figure movetoFigure = moveTo.get();
+            if(movetoFigure.isWhite() == this.isWhite())
+                return false;
+
+            this.isRemovingFigure = true;
         }
         else
         {
-            return -1;
+            return false;
         }
+
+        return true;
+    }
+
+    private boolean checkDirWithoutRemove(Field.Direction dir, int diff)
+    {
+        Field nextField=this.actField;
+        for (int i = 0; i < diff; i++)
+        {
+            nextField = nextField.nextField(dir);
+            if(!(nextField.isEmpty()))
+                return false;
+        }
+        return true;
     }
 
     public String getState()

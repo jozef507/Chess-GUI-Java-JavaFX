@@ -3,14 +3,14 @@ import sample.figures.Figure;
 
 public interface Field
 {
-    public static enum Direction
+    enum Direction
     {
-        D, L, LD, LU, R, RD, RU, U
+        D, L, LD, LU, R, RD, RU, U, NONE
+
     }
 
 
-
-    public static Direction[] values()
+    static Direction[] myValues()
     {
         Direction[] directions = { Direction.D, Direction.L, Direction.LD, Direction.LU,
                 Direction.R, Direction.RD, Direction.RU, Direction.U};
@@ -19,7 +19,10 @@ public interface Field
     }
 
 
-    public static Direction valueOf (String name) throws IllegalArgumentException,
+
+
+
+    static Direction valueOf (String name) throws IllegalArgumentException,
             NullPointerException
     {
         if(name == null)

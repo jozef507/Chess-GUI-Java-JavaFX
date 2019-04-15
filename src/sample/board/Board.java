@@ -21,7 +21,7 @@ public class Board
             for(int j = 0; j < size; j++)
             {
                 Field tmp;
-                for (Field.Direction dirs : Field.Direction.values())
+                for (Field.Direction dirs : Field.myValues())
                 {
                     tmp = chooseNextField(dirs, i, j, board, size);
                     board[i][j].addNextField(dirs, tmp);

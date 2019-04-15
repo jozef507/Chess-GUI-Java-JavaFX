@@ -1,11 +1,14 @@
 package sample.figures;
+import javafx.scene.image.ImageView;
 import sample.board.Field;
+
 
 
 public class Rook implements Figure
 {
     private boolean isRookWhite;
     private Field actField;
+    private ImageView image;
 
     public Rook(boolean isWhite)
     {
@@ -13,6 +16,13 @@ public class Rook implements Figure
 
         this.actField = null;
     }
+
+
+    public ImageView getImage()
+    {
+        return this.image;
+    }
+
 
     public boolean isWhite()
     {
@@ -47,10 +57,10 @@ public class Rook implements Figure
         return this.actField;
     }
 
-    public boolean move(Field moveTo)
+    public int move(Field moveTo)
     {
         if(this.actField == null)
-            return false;
+            return -1;
 
         int actCol = this.actField.getColPos();
         int actRow = this.actField.getRowPos();
@@ -58,9 +68,9 @@ public class Rook implements Figure
         switch(isDirectionCorrect(actCol, actRow, moveTo))
         {
             case -1:
-                return false;
+                return -1;
             case 0:
-                return true;
+                return 1;
             case 1:
                 checkDirection = Field.Direction.D;
                 break;
@@ -77,7 +87,7 @@ public class Rook implements Figure
 
 
         if(!isMoveInDirectPoss(checkDirection, moveTo))
-            return false;
+            return -1;
 
 
         if(!moveTo.isEmpty())
@@ -88,7 +98,7 @@ public class Rook implements Figure
         this.actField.remove(this);
         moveTo.put(this);
 
-        return true;
+        return 1;
     }
 
     private boolean isMoveInDirectPoss(Field.Direction dirs, Field moveTo)

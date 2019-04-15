@@ -6,6 +6,7 @@ import javafx.animation.TranslateTransition;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -23,9 +24,14 @@ import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import sample.game.*;
+
 public class GuiGameContr implements Initializable
 {
-
+    private Game game;
+    private int fieldDiff;
+    private ImageView[] whiteFiguresImages;
+    private ImageView[] blackFiguresImages;
     @FXML
     public ImageView pawnWhite1;
     @FXML
@@ -43,95 +49,177 @@ public class GuiGameContr implements Initializable
     @FXML
     public ImageView pawnWhite8;
     @FXML
+    public ImageView pawnBlack1;
+    @FXML
+    public ImageView pawnBlack2;
+    @FXML
+    public ImageView pawnBlack3;
+    @FXML
+    public ImageView pawnBlack4;
+    @FXML
+    public ImageView pawnBlack5;
+    @FXML
+    public ImageView pawnBlack6;
+    @FXML
+    public ImageView pawnBlack7;
+    @FXML
+    public ImageView pawnBlack8;
+    @FXML
     public AnchorPane board;
 
 
     public void initialize(URL location, ResourceBundle resources)
     {
+        whiteFiguresImages = createWhiteFigureImagesArray();
+        blackFiguresImages = createBlackFigureImagesArray();
+        game = new ChessGame(whiteFiguresImages, blackFiguresImages);
+
+        setOpacityForImages(whiteFiguresImages, 1);
+        setOpacityForImages(blackFiguresImages, 0.87);
+        setCursorForImages(whiteFiguresImages, Cursor.HAND);
+        setCursorForImages(blackFiguresImages, Cursor.DISAPPEAR);
+
         board.setPickOnBounds(true);
         board.setOnMouseClicked(e -> {
-            System.out.println("["+getGuiFieldOnClickX(e.getX())+", "+getGuiFieldOnClickY(e.getY())+"]");
+            onBoardClick(e.getX(), e.getY());
         });
-
-        /*pawnWhite1.setOnMouseClicked(event -> {
-            PathTransition t = new PathTransition();
-            t.setNode(pawnWhite1);
-            t.setDuration(Duration.seconds(3));
-            t.setPath(line);
-            t.play();
-        });*/
     }
 
-    public void a1ButtonOnClick()
+    private ImageView[] createWhiteFigureImagesArray()
     {
-        //System.out.println("ardflakjdfôladsjfaôsj");
-    }
-
-    public void boardClicked()
-    {
+        ImageView[] whiteFigures = new ImageView[8];
+        whiteFigures[0] = pawnWhite1;
+        whiteFigures[1] = pawnWhite2;
+        whiteFigures[2] = pawnWhite3;
+        whiteFigures[3] = pawnWhite4;
+        whiteFigures[4] = pawnWhite5;
+        whiteFigures[5] = pawnWhite6;
+        whiteFigures[6] = pawnWhite7;
+        whiteFigures[7] = pawnWhite8;
+        return whiteFigures;
 
     }
 
-
-    public void pawnWhite1OnClick()
+    private ImageView[] createBlackFigureImagesArray()
     {
+        ImageView[] blackFigures = new ImageView[8];
+        blackFigures[0] = pawnBlack1;
+        blackFigures[1] = pawnBlack2;
+        blackFigures[2] = pawnBlack3;
+        blackFigures[3] = pawnBlack4;
+        blackFigures[4] = pawnBlack5;
+        blackFigures[5] = pawnBlack6;
+        blackFigures[6] = pawnBlack7;
+        blackFigures[7] = pawnBlack8;
+        return blackFigures;
 
-        TranslateTransition move = new TranslateTransition(Duration.seconds(2));
-        double fromY=0;
-        double fromX=0;
-        double toY = getGuiPositionOfImageY(5) - getGuiPositionOfImageY(getGuiFieldOfImageY(pawnWhite1.getLayoutY()));
-        double toX = getGuiPositionOfImageX(5) - getGuiPositionOfImageX(getGuiFieldOfImageX(pawnWhite1.getLayoutX()));
+    }
+
+    private void guiChangePlayer()
+    {
+        if(this.game.isWhiteOnTheMove())
+        {
+            setOpacityForImages(whiteFiguresImages, 1);
+            setOpacityForImages(blackFiguresImages, 0.87);
+            setCursorForImages(whiteFiguresImages, Cursor.HAND);
+            setCursorForImages(blackFiguresImages, Cursor.DISAPPEAR);
+        }
+        else
+        {
+            setOpacityForImages(blackFiguresImages, 1);
+            setOpacityForImages(whiteFiguresImages, 0.87);
+            setCursorForImages(blackFiguresImages, Cursor.HAND);
+            setCursorForImages(whiteFiguresImages, Cursor.DISAPPEAR);
+        }
+    }
+
+    private void setOpacityForImages(ImageView[] images, double opacity)
+    {
+        int size = images.length;
+        for (int i = 0; i<size; i++)
+        {
+            images[i].setOpacity(opacity);
+        }
+    }
+
+    private void setCursorForImages(ImageView[] images, Cursor cursor)
+    {
+        int size = images.length;
+        for (int i = 0; i<size; i++)
+        {
+            images[i].setCursor(cursor);
+        }
+    }
+
+    private void onBoardClick(double clickX, double clickY)
+    {
+        System.out.println("["+getGuiFieldOnClickX(clickX)+", "+getGuiFieldOnClickY(clickY)+"]");
+
+        int clickedX = getGuiFieldOnClickX(clickX);
+        int clickedY = getGuiFieldOnClickY(clickY);
+        if(clickedX != -1 && clickedY != -1)
+        {
+            game.setMovement(clickedX, clickedY);
+
+            int flagPerformMovement = game.performMovement();
+            if(flagPerformMovement==1 || flagPerformMovement==2)
+            {
+
+
+                guiMoveFigureImage(game.getImageOfMovFigure(), game.getGoalField().getColPos(), game.getGoalField().getRowPos());
+                board.setDisable(true);
+
+                if(flagPerformMovement==2)
+                    game.getImageOfGoalFieldFigure().setOpacity(0.35);
+
+                Timer timer = new Timer("Timer");
+                TimerTask task = new TimerTask() {
+                    public void run() {
+                        if(flagPerformMovement==2)
+                            game.getImageOfGoalFieldFigure().setVisible(false);
+
+                        game.nullMovementManager();
+                        game.changePlayer();
+                        guiChangePlayer();
+                        board.setDisable(false);
+                        timer.cancel();
+                    }
+                };
+                timer.schedule(task, (100*this.fieldDiff)+10);
+            }
+            else if(flagPerformMovement==-1)
+            {
+                game.nullMovementManager();
+            }
+        }
+    }
+
+    private void guiMoveFigureImage(ImageView image, int toFieldX, int toFieldY)
+    {
+        image.toFront();
+        int fromFieldX = getGuiFieldOfImageX(image.getLayoutX());
+        int fromFieldY = getGuiFieldOfImageY(image.getLayoutY());
+
+        if(Math.abs(fromFieldX-toFieldX) > Math.abs(fromFieldY-toFieldY))
+            this.fieldDiff = Math.abs(fromFieldX-toFieldX);
+        else
+            this.fieldDiff = Math.abs(fromFieldY-toFieldY);
+
+        double fromY=image.getTranslateY();
+        double fromX=image.getTranslateX();
+        double toY = getGuiPositionOfImageY(toFieldY) - getGuiPositionOfImageY(fromFieldY);
+        double toX = getGuiPositionOfImageX(toFieldX) - getGuiPositionOfImageX(fromFieldX);
+        TranslateTransition move = new TranslateTransition(Duration.millis(100*this.fieldDiff));
         move.setFromY(fromY);
         move.setToY(toY);
         move.setFromX(fromX);
         move.setToX(toX);
-        System.out.println(toX+ " " + toY);
-        move.setNode(pawnWhite1);
+        move.setNode(image);
         move.setAutoReverse(true);
         move.play();
-
-
-
-        Timer timer = new Timer("Timer");
-        TimerTask task = new TimerTask() {
-            public void run() {
-                move.setFromX(pawnWhite1.getTranslateX());
-                move.setFromY(pawnWhite1.getTranslateY());
-                move.setToX(getGuiPositionOfImageX(8) - getGuiPositionOfImageX(getGuiFieldOfImageX(pawnWhite1.getLayoutX())));
-                move.setToY(getGuiPositionOfImageY(1) - getGuiPositionOfImageY(getGuiFieldOfImageY(pawnWhite1.getLayoutY())));
-                move.setAutoReverse(true);
-                move.setCycleCount(1);
-                move.play();
-                timer.cancel();
-            }
-        };
-
-
-        timer.schedule(task, 2100);
-
-
-        /*try {
-            Thread.sleep(2100);
-        } catch(InterruptedException ex) {
-            Thread.currentThread().interrupt();
-        }*/
-
-
-
-
-        System.out.println(pawnWhite1.getLayoutX()+ " " + pawnWhite1.getLayoutY()+ " " + pawnWhite1.getTranslateX()+ " " + pawnWhite1.getTranslateY());
-
-        /*move.setOnFinished(event ->{
-            System.out.println(pawnWhite1.getLayoutX()+ " " + pawnWhite1.getLayoutY()+ " " + pawnWhite1.getTranslateX()+ " " + pawnWhite1.getTranslateY());
-        });*/
-
-        /*final Circle circle = new Circle(20, 20, 15);
-        circle.setFill(Color.DARKRED);*/
-
-
     }
 
-    public int getGuiFieldOnClickX(double position)
+    private int getGuiFieldOnClickX(double position)
     {
         if(position>=35 && position<=110)
         {
@@ -171,7 +259,7 @@ public class GuiGameContr implements Initializable
         }
     }
 
-    public int getGuiFieldOnClickY(double position)
+    private int getGuiFieldOnClickY(double position)
     {
         if(position>=35 && position<=110)
         {

@@ -1,6 +1,8 @@
 package sample.game;
+import javafx.scene.image.ImageView;
 import sample.figures.*;
 import sample.board.*;
+
 
 
 import java.util.ArrayList;
@@ -8,96 +10,143 @@ import java.util.List;
 
 public class ChessGame implements Game
 {
-    public List<Figure> previousPositionsFigures = new ArrayList<Figure>();
-    public List<Field> previousPositionsFields = new ArrayList<Field>();
-    public List<Figure> previousPositionsRemovedFigures = new ArrayList<Figure>();
+    private Board board;
+    //Notation notation;
+    private List<Figure> activeWhiteFigures;
+    private List<Figure> activeBlackFigures;
 
-    public ChessGame(Board board)
+
+    private boolean canPlayerPlay;
+    private boolean isWhiteOnTheMove;
+    //private boolean isFigureChoosen;
+    private Field startField;
+    private Figure movementFigure;
+    private Field goalField;
+    private Figure goalFieldFigure;
+
+
+    public ChessGame(ImageView[] whiteFigureImages, ImageView[] blackFigureImages)
     {
-        putRookOnBoard(board,1,1, true);
-        putRookOnBoard(board,8,1, true);
+        this.board = new Board(8);
+        this.activeWhiteFigures = new ArrayList<Figure>();
+        this.activeBlackFigures = new ArrayList<Figure>();
 
-        putPawnOnBoard(board,1,2, true);
-        putPawnOnBoard(board,2,2, true);
-        putPawnOnBoard(board,3,2, true);
-        putPawnOnBoard(board,4,2, true);
-        putPawnOnBoard(board,5,2, true);
-        putPawnOnBoard(board,6,2, true);
-        putPawnOnBoard(board,7,2, true);
-        putPawnOnBoard(board,8,2, true);
+        this.canPlayerPlay = true;
+        this.isWhiteOnTheMove = true;
+        this.startField = null;
+        this.movementFigure = null;
+        this.goalField = null;
+        this.goalFieldFigure = null;
 
+        putPawnOnBoard(1, 2, true, whiteFigureImages[0]);
+        putPawnOnBoard(2, 2, true, whiteFigureImages[1]);
+        putPawnOnBoard(3, 2, true, whiteFigureImages[2]);
+        putPawnOnBoard(4, 2, true, whiteFigureImages[3]);
+        putPawnOnBoard(5, 2, true, whiteFigureImages[4]);
+        putPawnOnBoard(6, 2, true, whiteFigureImages[5]);
+        putPawnOnBoard(7, 2, true, whiteFigureImages[6]);
+        putPawnOnBoard(8, 2, true, whiteFigureImages[7]);
 
-        putRookOnBoard(board,1,8, false);
-        putRookOnBoard(board,8,8, false);
-
-        putPawnOnBoard(board,1,7, false);
-        putPawnOnBoard(board,2,7, false);
-        putPawnOnBoard(board,3,7, false);
-        putPawnOnBoard(board,4,7, false);
-        putPawnOnBoard(board,5,7, false);
-        putPawnOnBoard(board,6,7, false);
-        putPawnOnBoard(board,7,7, false);
-        putPawnOnBoard(board,8,7, false);
+        putPawnOnBoard(1, 7, false, blackFigureImages[0]);
+        putPawnOnBoard(2, 7, false, blackFigureImages[1]);
+        putPawnOnBoard(3, 7, false, blackFigureImages[2]);
+        putPawnOnBoard(4, 7, false, blackFigureImages[3]);
+        putPawnOnBoard(5, 7, false, blackFigureImages[4]);
+        putPawnOnBoard(6, 7, false, blackFigureImages[5]);
+        putPawnOnBoard(7, 7, false, blackFigureImages[6]);
+        putPawnOnBoard(8, 7, false, blackFigureImages[7]);
     }
 
-    private void putRookOnBoard(Board board, int col, int row, boolean isRookWhite)
+    private void putPawnOnBoard(int col, int row, boolean isPawnWhite, ImageView image)
     {
-        Field field = board.getField(col, row);
+        Field field = this.board.getField(col, row);
         if(field.isEmpty())
         {
-            Rook rook = new Rook(isRookWhite);
-            field.put(rook);
-        }
-    }
-
-    private void putPawnOnBoard(Board board, int col, int row, boolean isPawnWhite)
-    {
-        Field field = board.getField(col, row);
-        if(field.isEmpty())
-        {
-            Pawn pawn = new Pawn(isPawnWhite);
+            Pawn pawn = new Pawn(isPawnWhite, image);
             field.put(pawn);
         }
     }
 
-
-    public boolean move(Figure figure, Field moveTo)
+    public Field getGoalField()
     {
-        Figure moveToFigure=null;
-        if(!moveTo.isEmpty())
-        {
-            moveToFigure = moveTo.get();
-        }
+        return this.goalField;
+    }
 
-        Field figurePrevField = figure.getActField();
-        if (!figure.move(moveTo))
+    public void changePlayer()
+    {
+        this.isWhiteOnTheMove = !isWhiteOnTheMove;
+    }
+
+    public void setCanPlayerPlay(boolean canPlayerPlay)
+    {
+        this.canPlayerPlay = canPlayerPlay;
+    }
+
+    public void nullMovementManager()
+    {
+        this.startField = null;
+        this.movementFigure = null;
+        this.goalField = null;
+        this.goalFieldFigure = null;
+    }
+
+    public boolean setMovement(int col, int row)
+    {
+        if (!canPlayerPlay)
         {
             return false;
         }
 
-        previousPositionsFigures.add(figure);
-        previousPositionsFields.add(figurePrevField);
-        previousPositionsRemovedFigures.add(moveToFigure);
+        if(this.startField == null)
+        {
+            this.startField = this.board.getField(col, row);
+            if(this.startField.isEmpty())
+            {
+                this.nullMovementManager();
+                return false;
+            }
 
-        return true;
+            this.movementFigure = this.startField.get();
+            if(this.movementFigure.isWhite() != this.isWhiteOnTheMove)
+            {
+                this.nullMovementManager();
+                return false;
+            }
+            return true;
+        }
+        else
+        {
+            this.goalField = this.board.getField(col, row);
+            if(!this.goalField.isEmpty())
+                this.goalFieldFigure = goalField.get();
+            return true;
+        }
     }
 
-    public void undo()
+    public int performMovement()
     {
-        Figure lastMovedFigure = previousPositionsFigures.get(previousPositionsFigures.size() - 1);
-        previousPositionsFigures.remove(previousPositionsFigures.size() - 1);
-        Field lastFieldOfMovedFigure = previousPositionsFields.get(previousPositionsFields.size() - 1);
-        previousPositionsFields.remove(previousPositionsFields.size() - 1);
-        Figure removedFigure = previousPositionsRemovedFigures.get(previousPositionsRemovedFigures.size() - 1);
-        previousPositionsRemovedFigures.remove(previousPositionsRemovedFigures.size() - 1);
-
-        Field actualField = lastMovedFigure.getActField();
-        actualField.remove(lastMovedFigure);
-        lastFieldOfMovedFigure.put(lastMovedFigure);
-
-        if (removedFigure != null)
+        if(this.startField != null && this.movementFigure != null && this.goalField != null)
         {
-            actualField.put(removedFigure);
+           return (this.movementFigure.move(this.goalField));
         }
+        else
+        {
+            return 0;
+        }
+    }
+
+    public ImageView getImageOfMovFigure()
+    {
+        return this.movementFigure.getImage();
+    }
+
+    public ImageView getImageOfGoalFieldFigure()
+    {
+        return this.goalFieldFigure.getImage();
+    }
+
+    public boolean isWhiteOnTheMove()
+    {
+        return this.isWhiteOnTheMove;
     }
 }
