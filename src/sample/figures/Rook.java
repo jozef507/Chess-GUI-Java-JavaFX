@@ -2,19 +2,26 @@ package sample.figures;
 import javafx.scene.image.ImageView;
 import sample.board.Field;
 
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class Rook implements Figure
 {
+    private int ID;
     private boolean isRookWhite;
+    private boolean isRemovingFigure;
     private Field actField;
     private ImageView image;
+    private List<Field> fieldsInDanger;
 
-    public Rook(boolean isWhite)
+    public Rook(boolean isWhite, ImageView image)
     {
+        this.ID = 4;
         this.isRookWhite = isWhite;
-
         this.actField = null;
+        this.image = image;
+        this.fieldsInDanger = new ArrayList<Field>();
     }
 
 
@@ -57,136 +64,170 @@ public class Rook implements Figure
         return this.actField;
     }
 
-    public int move(Field moveTo)
+    public int move(Field moveTo, FiguresManager figuresManager)
     {
         if(this.actField == null)
             return -1;
 
         int actCol = this.actField.getColPos();
         int actRow = this.actField.getRowPos();
-        Field.Direction checkDirection = null;
-        switch(isDirectionCorrect(actCol, actRow, moveTo))
-        {
-            case -1:
-                return -1;
-            case 0:
-                return 1;
-            case 1:
-                checkDirection = Field.Direction.D;
-                break;
-            case 2:
-                checkDirection = Field.Direction.U;
-                break;
-            case 3:
-                checkDirection = Field.Direction.L;
-                break;
-            case 4:
-                checkDirection = Field.Direction.R;
-                break;
-        }
+        int movetoCol = moveTo.getColPos();
+        int movetoRow = moveTo.getRowPos();
 
-
-        if(!isMoveInDirectPoss(checkDirection, moveTo))
+        if(actCol == movetoCol && actRow == movetoRow)
             return -1;
 
+        if(!isMovementPossible(actCol, actRow, moveTo, movetoCol, movetoRow))
+            return -1;
 
-        if(!moveTo.isEmpty())
+        int flag = 1;
+        Figure movetoFigure = null;
+        Field prevField = this.actField;
+        if(this.isRemovingFigure)
         {
-            Figure figureOnMoveto = moveTo.get();
-            moveTo.remove(figureOnMoveto);
+            movetoFigure = moveTo.get();
+            moveTo.remove(movetoFigure);
+            this.isRemovingFigure = false;
+            flag = 2;
         }
         this.actField.remove(this);
         moveTo.put(this);
 
-        return 1;
+
+        if(!figuresManager.updateFigures(this.isWhite(), this, movetoFigure))
+        {
+            moveTo.remove(this);
+            prevField.put(this);
+            if (flag == 2)
+            {
+                moveTo.put(movetoFigure);
+            }
+            flag = -1;
+        }
+
+        return flag;
     }
 
-    private boolean isMoveInDirectPoss(Field.Direction dirs, Field moveTo)
+    private boolean isMovementPossible(int actCol, int actRow, Field moveTo, int movetoCol, int movetoRow)
     {
-        if(!moveTo.isEmpty())
-        {
-            Figure figureOnMoveTo = moveTo.get();
-            if(figureOnMoveTo.isWhite() == this.isRookWhite)
-            {
-                return false;
-            }
-        }
+        int colDiff = Math.abs(movetoCol-actCol);
+        int rowDiff = Math.abs(movetoRow-actRow);
 
-        int fieldDifference;
-        if (dirs == Field.Direction.D || dirs == Field.Direction.U)
+        Field.Direction dir;
+        if(actRow < movetoRow && colDiff == 0)
         {
-            fieldDifference = (moveTo.getRowPos()) - this.actField.getRowPos();
-
+            dir = Field.Direction.U;
         }
-        else if (dirs == Field.Direction.R || dirs == Field.Direction.L)
+        else if(actRow > movetoRow && colDiff == 0)
         {
-            fieldDifference = (moveTo.getColPos()) - this.actField.getColPos();
+            dir = Field.Direction.D;
+        }
+        else if (actCol < movetoCol && rowDiff == 0)
+        {
+            dir = Field.Direction.R;
+        }
+        else if (actCol > movetoCol && rowDiff == 0)
+        {
+            dir = Field.Direction.L;
         }
         else
         {
             return false;
         }
 
-        fieldDifference = Math.abs(fieldDifference);
-        fieldDifference--;
+        int diff = (rowDiff == 0 ? colDiff : rowDiff);
+        if(!checkDirection(dir, diff))
+            return false;
 
-        Field tmp = moveTo;
-        for (int i = 0; i < fieldDifference; i++)
+        if(!moveTo.isEmpty())
         {
-            tmp = tmp.nextField(dirs);
-            if(!(tmp.isEmpty()))
-            {
+            Figure movetoFigure = moveTo.get();
+            if(movetoFigure.isWhite() == this.isWhite())
                 return false;
-            }
+
+            if(movetoFigure instanceof King)
+                return false;
+
+            this.isRemovingFigure = true;
         }
 
         return true;
     }
 
-    private short isDirectionCorrect(int col, int row, Field moveTo)
+    private boolean checkDirection(Field.Direction dir, int diff)
     {
-        if(col == moveTo.getColPos() && row == moveTo.getRowPos())
+        Field nextField=this.actField;
+        for (int i = 0; i < diff-1; i++)
         {
-            return 0;
+            nextField = nextField.nextField(dir);
+            if(!(nextField.isEmpty()))
+                return false;
         }
-        else if (col == moveTo.getColPos())
+        return true;
+    }
+
+    public void setFieldsInDanger()
+    {
+        this.fieldsInDanger.clear();
+
+        this.appendFieldsInDanger(Field.Direction.U);
+        this.appendFieldsInDanger(Field.Direction.D);
+        this.appendFieldsInDanger(Field.Direction.R);
+        this.appendFieldsInDanger(Field.Direction.L);
+    }
+
+    private void appendFieldsInDanger(Field.Direction dir)
+    {
+        Field nextField = this.actField.nextField(dir);
+        while (nextField != null)
         {
-            if (row < moveTo.getRowPos())
-            {
-                return 1;       //check direction -> down from moveTO
-            }
-            else
-            {
-                return 2;       //check direction -> up from moveTO
-            }
-        }
-        else if (row == moveTo.getRowPos())
-        {
-            if (col < moveTo.getColPos())
-            {
-                return 3;       //check direction -> left from moveTO
-            }
-            else
-            {
-                return 4;       //check direction -> right from moveTO
-            }
-        }
-        else
-        {
-            return -1;
+            this.fieldsInDanger.add(nextField);
+            if (!nextField.isEmpty())
+                break;
+            nextField = nextField.nextField(dir);
         }
     }
 
-
-    public String getState()
+    public List<Field> getFieldsInDanger()
     {
-        String color;
-        if(this.isWhite())
-            color = "W";
-        else
-            color = "B";
+        return this.fieldsInDanger;
+    }
 
-        return "V[" + color + "]" + this.actField.getColPos() + ":" + this.actField.getRowPos();
+    public int getID() {return this.ID;}
+
+    public List<Field> getFieldsOfDirectionToField(Field field)
+    {
+        if(!this.fieldsInDanger.contains(field))
+            return null;
+
+        int colDiff = field.getColPos() - this.actField.getColPos();
+        int rowDiff = field.getRowPos() - this.actField.getRowPos();
+
+
+        Field.Direction dir;
+        if (colDiff>0 && rowDiff==0)
+            dir = Field.Direction.R;
+        else if (colDiff<0 && rowDiff==0)
+            dir = Field.Direction.L;
+        else if (colDiff==0 && rowDiff>0)
+            dir = Field.Direction.U;
+        else if (colDiff==0 && rowDiff<0)
+            dir = Field.Direction.D;
+        else
+            dir = Field.Direction.NONE;
+
+        if(dir == Field.Direction.NONE)
+            return null;
+
+        List<Field> fieldsOfDirToField = new ArrayList<Field>();
+        Field nextField = this.actField;
+        while (nextField!=field)
+        {
+            fieldsOfDirToField.add(nextField);
+            nextField = nextField.nextField(dir);
+        }
+
+        return fieldsOfDirToField;
     }
 
 }

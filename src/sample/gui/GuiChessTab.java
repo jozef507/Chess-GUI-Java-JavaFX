@@ -19,7 +19,6 @@ public class GuiChessTab
             tab.setContent((Node) root);
             tab.setText("Game " + gameNumber);
             GuiGameContr controller = loader.getController();
-
         } catch (IOException e) {
             e.printStackTrace();
         }

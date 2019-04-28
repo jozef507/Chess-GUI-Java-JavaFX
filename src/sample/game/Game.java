@@ -3,15 +3,28 @@ import javafx.scene.image.ImageView;
 import sample.board.Field;
 import sample.figures.Figure;
 
+import java.util.List;
+
 public interface Game
 {
     void nullMovementManager();
     boolean setMovement(int col, int row);
-    int performMovement();
+    boolean performMovement();
+    void changePlayer();
+    boolean isWhiteOnTheMove();
+    void setCanPlayerPlay(boolean canPlayerPlay);
+    Field getGoalField();
+    boolean isMovementCompletlySet();
+    boolean isRemovingFigure();
+    boolean getChess();
+    boolean getChessMat();
+    boolean getIsChangingFigure ();
+    boolean createNewFigure(ImageView image, int id);
+
     ImageView getImageOfMovFigure();
     ImageView getImageOfGoalFieldFigure();
-    void changePlayer();
-    Field getGoalField();
-    boolean isWhiteOnTheMove();
+
+
+    List<String> getGameNotation();
 
 }

@@ -4,8 +4,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
 
-abstract class GuiGameFactory
+public abstract class GuiGameFactory
 {
+    public static String[] stringFilepathArray;
+    public static int counter = 0;
+
     public static void createChessScreen(String[] filepathArray)
     {
         // set title for the stage
@@ -18,13 +21,14 @@ abstract class GuiGameFactory
 
         // create multiple tabs
         int gameCount = filepathArray.length;
+        stringFilepathArray = filepathArray;
         for (int i = 0; i < gameCount; i++)
         {
             GuiChessTab tab = new GuiChessTab(i+1);
             tabpane.getTabs().add(tab.getTab());
         }
 
-        Scene scene = new Scene(tabpane, 900, 740);
+        Scene scene = new Scene(tabpane, 1100, 740);
         chessStage.setScene(scene);
         chessStage.show();
 

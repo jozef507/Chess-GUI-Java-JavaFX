@@ -59,9 +59,10 @@ public class Board
         nextRow = getNextRow(dirs);
         nextCol = col + nextCol;
         nextRow = row + nextRow;
+
         if(nextCol >= 0  &&  nextCol < size  &&  nextRow >=0  &&  nextRow < size)
         {
-            tmp = board[nextCol][nextRow];
+            tmp = this.board[nextCol][nextRow];
         }
         else
         {

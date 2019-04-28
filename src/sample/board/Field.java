@@ -51,13 +51,13 @@ public interface Field
     }
 
 
-    public int getColPos();
-    public int getRowPos();
-    public void addNextField(Direction dirs, Field field);
-    public Figure get();
-    public boolean isEmpty();
-    public Field nextField(Direction dirs);
-    public boolean put(Figure figure);
-    public boolean remove(Figure figure);
+    int getColPos();
+    int getRowPos();
+    void addNextField(Direction dirs, Field field);
+    Figure get();
+    boolean isEmpty();
+    Field nextField(Direction dirs);
+    boolean put(Figure figure);
+    boolean remove(Figure figure);
 
 }

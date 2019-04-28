@@ -11,6 +11,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -99,6 +100,14 @@ public class GuiGamesManagerContr implements Initializable
             {
                 filepathArray = null;
                 infoText.setText("Text fields can not be empty!");
+                infoText.setVisible(true);
+                return;
+            }
+
+            File f = new File(filepath);
+            if(!f.isFile())
+            {
+                infoText.setText("Path " + (i+1) + " to file is incorrect!");
                 infoText.setVisible(true);
                 return;
             }
