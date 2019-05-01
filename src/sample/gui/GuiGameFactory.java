@@ -13,11 +13,11 @@ public abstract class GuiGameFactory
     {
         // set title for the stage
         Stage chessStage = new Stage();
-        chessStage.setTitle("Creating Tab");
+        chessStage.setTitle("IJA Chess");
 
         // create a tabpane
         TabPane tabpane = new TabPane();
-        tabpane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+        //tabpane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
         // create multiple tabs
         int gameCount = filepathArray.length;
@@ -28,7 +28,7 @@ public abstract class GuiGameFactory
             tabpane.getTabs().add(tab.getTab());
         }
 
-        Scene scene = new Scene(tabpane, 1100, 740);
+        Scene scene = new Scene(tabpane, 965, 740);
         chessStage.setScene(scene);
         chessStage.show();
 

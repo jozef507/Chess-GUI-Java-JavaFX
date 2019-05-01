@@ -321,4 +321,14 @@ public class King implements Figure
         return fieldsOfDirToField;
     }
 
+    public List<Field> getFieldsForPossMov()
+    {
+        return this.fieldsInDanger;
+    }
+
+    public  List<Field> getFieldsInDangerChesMat()
+    {
+        return this.fieldsInDanger;
+    }
+
 }

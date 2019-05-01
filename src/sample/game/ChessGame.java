@@ -22,7 +22,6 @@ public class ChessGame implements Game {
         this.figuresManager = new FiguresManager();
         this.notation = new Notation(GuiGameFactory.stringFilepathArray[GuiGameFactory.counter++]);
 
-
         putPawnOnBoard(1, 2, true, whiteFigureImages[0]);
         putPawnOnBoard(2, 2, true, whiteFigureImages[1]);
         putPawnOnBoard(3, 2, true, whiteFigureImages[2]);
@@ -31,22 +30,14 @@ public class ChessGame implements Game {
         putPawnOnBoard(6, 2, true, whiteFigureImages[5]);
         putPawnOnBoard(7, 2, true, whiteFigureImages[6]);
         putPawnOnBoard(8, 2, true, whiteFigureImages[7]);
-
         putRookOnBoard(1, 1, true, whiteFigureImages[8]);
         putRookOnBoard(8, 1, true, whiteFigureImages[9]);
-
         putKnightOnBoard(2, 1, true, whiteFigureImages[10]);
         putKnightOnBoard(7, 1, true, whiteFigureImages[11]);
-
         putBishopOnBoard(3, 1, true, whiteFigureImages[12]);
         putBishopOnBoard(6, 1, true, whiteFigureImages[13]);
-
         putQueenOnBoard(4, 1, true, whiteFigureImages[14]);
-
         putKingOnBoard(5, 1, true, whiteFigureImages[15]);
-
-
-
 
         putPawnOnBoard(1, 7, false, blackFigureImages[0]);
         putPawnOnBoard(2, 7, false, blackFigureImages[1]);
@@ -56,19 +47,17 @@ public class ChessGame implements Game {
         putPawnOnBoard(6, 7, false, blackFigureImages[5]);
         putPawnOnBoard(7, 7, false, blackFigureImages[6]);
         putPawnOnBoard(8, 7, false, blackFigureImages[7]);
-
         putRookOnBoard(1, 8, false, blackFigureImages[8]);
         putRookOnBoard(8, 8, false, blackFigureImages[9]);
-
         putKnightOnBoard(2, 8, false, blackFigureImages[10]);
         putKnightOnBoard(7, 8, false, blackFigureImages[11]);
-
         putBishopOnBoard(3, 8, false, blackFigureImages[12]);
         putBishopOnBoard(6, 8, false, blackFigureImages[13]);
-
         putQueenOnBoard(4, 8, false, blackFigureImages[14]);
-
         putKingOnBoard(5, 8, false, blackFigureImages[15]);
+
+        this.figuresManager.setWhiteFieldsInDanger();
+        this.figuresManager.setBlackFieldsInDanger();
     }
 
     private void putPawnOnBoard(int col, int row, boolean isPawnWhite, ImageView image) {
@@ -133,13 +122,42 @@ public class ChessGame implements Game {
 
     public void nullMovementManager() { this.movementManager.nullMovementManager(); }
 
-    public boolean setMovement(int col, int row) { return this.movementManager.setMovement(col, row, this.board); }
+    public boolean setPlayerMovement(int col, int row) { return this.movementManager.setPlayerMovement(col, row, this.board); }
 
-    public boolean performMovement()
+    public boolean setPlaybackMovement(){return this.movementManager.setPlaybackMovement(this.board, this.notation, this.figuresManager);}
+
+    public boolean performPlayerMovement() {return this.movementManager.performMovement(this.figuresManager);}
+
+    public boolean performPlaybackMovement()
     {
         boolean flag = this.movementManager.performMovement(this.figuresManager);
-        return flag;
-    }
+        if (!flag)
+            return false;
+
+        if(this.movementManager.getIsRemovingFigure() != this.notation.getActualNotMov().getIsFigureRemoving())
+            return false;
+
+        if((this.movementManager.getIsChangingFigure()))
+        {
+            if(this.notation.getActualNotMov().getChangingFigureID() == -1)
+                return false;
+        }
+        else
+        {
+            if(this.notation.getActualNotMov().getChangingFigureID() != -1)
+                return false;
+        }
+
+        if(this.figuresManager.getChessMat() != this.notation.getActualNotMov().getIsChessMat())
+            if(this.figuresManager.getChess() != this.notation.getActualNotMov().getIsChess())
+                return false;
+
+        return true;
+    };
+
+    public boolean setPlaybackUndoMovement(){return this.movementManager.setPlaybackUndoMovement(this.notation.getPrevNotationMovement(), this.board, this.figuresManager);}
+
+    public boolean performPlaybackUndoMovement(){return this.movementManager.performPlaybackUndoMovement(this.notation.getPrevNotationMovement(), this.figuresManager);}
 
     public boolean isWhiteOnTheMove() {return this.movementManager.isWhiteOnTheMove(); }
 
@@ -148,6 +166,8 @@ public class ChessGame implements Game {
     public ImageView getImageOfGoalFieldFigure() { return this.movementManager.getGoalFieldFigure().getImage();}
 
     public List<String> getGameNotation(){ return this.notation.getGameNotationLines(); }
+
+    public int getIndexOfGameNotation(){return this.notation.getIndexProcNotMov();}
 
     public boolean isMovementCompletlySet() {return this.movementManager.isMovementCompletlySet();}
 
@@ -199,4 +219,35 @@ public class ChessGame implements Game {
         field.remove(changedFigure);
         this.figuresManager.addChangedFigure(changedFigure);
     }
+
+    public void addPlayerNotationMovement(){this.notation.addPlayerNotationMovement(this.figuresManager, this.movementManager);}
+
+    public boolean saveNotation() {return this.notation.saveNotation();}
+
+    public int getChangingFigureID(){return this.notation.getChangingFigureID();}
+
+    public void incrementIndexOfNotationLines()
+    {
+        this.notation.incrementIndexOfNotationLines();
+    }
+
+    public void decrementIndexOfNotationLines(){this.notation.decrementIndexOfNotationLines();}
+
+    public boolean isFirstIndexOfNotation() {return this.notation.isFirstIndex();}
+
+    public boolean isLastIndexOfNotation()
+    {
+        return this.notation.isLastIndex();
+    }
+
+    public void completeNotationMovement()
+    {
+        this.notation.completeNotationMovement(this.movementManager);
+    }
+
+    public MovementManager getMovementManager(){return this.movementManager;}
+
+    public boolean isNotationRight(){return this.notation.getIsRight();}
+
+
 }

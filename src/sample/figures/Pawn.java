@@ -113,6 +113,8 @@ public class Pawn implements Figure
                 flag = 4;
         }
 
+        this.firstMovementDone = true;
+
 
         return flag;
     }
@@ -121,6 +123,13 @@ public class Pawn implements Figure
     {
         int colDiff = Math.abs(movetoCol-actCol);
         int rowDiff = Math.abs(movetoRow-actRow);
+
+        if(this.isWhite() && this.actField.getRowPos() == 2)
+            this.firstMovementDone = false;
+        else if(!this.isWhite() && this.actField.getRowPos() == 7)
+            this.firstMovementDone = false;
+
+
 
         if (colDiff == 0)
         {
@@ -207,23 +216,23 @@ public class Pawn implements Figure
         this.fieldsInDanger.clear();
 
         if(this.isWhite())
-        {
-            Field nextField = this.actField.nextField(Field.Direction.LU);
-            if(nextField!=null)
-                this.fieldsInDanger.add(nextField);
-            nextField = this.actField.nextField(Field.Direction.RU);
-            if(nextField!=null)
-                this.fieldsInDanger.add(nextField);
-        }
-        else
-        {
-            Field nextField = this.actField.nextField(Field.Direction.LD);
-            if(nextField!=null)
-                this.fieldsInDanger.add(nextField);
-            nextField = this.actField.nextField(Field.Direction.RD);
-            if(nextField!=null)
-                this.fieldsInDanger.add(nextField);
-        }
+    {
+        Field nextField = this.actField.nextField(Field.Direction.LU);
+        if(nextField!=null)
+            this.fieldsInDanger.add(nextField);
+        nextField = this.actField.nextField(Field.Direction.RU);
+        if(nextField!=null)
+            this.fieldsInDanger.add(nextField);
+    }
+    else
+    {
+        Field nextField = this.actField.nextField(Field.Direction.LD);
+        if(nextField!=null)
+            this.fieldsInDanger.add(nextField);
+        nextField = this.actField.nextField(Field.Direction.RD);
+        if(nextField!=null)
+            this.fieldsInDanger.add(nextField);
+    }
 
     }
 
@@ -259,6 +268,70 @@ public class Pawn implements Figure
                 return true;
         }
         return false;
+    }
+
+    public List<Field> getFieldsForPossMov() {
+        List<Field> tmp = new ArrayList<Field>();
+        if (this.isWhite()) {
+            if (this.firstMovementDone) {
+                Field field = this.actField.nextField(Field.Direction.U);
+                if (field != null && field.isEmpty())
+                    tmp.add(field);
+            } else {
+                Field field = this.actField.nextField(Field.Direction.U);
+                if (field != null && field.isEmpty()) {
+                    tmp.add(field);
+                    field = field.nextField(Field.Direction.U);
+                    if (field != null && field.isEmpty())
+                        tmp.add(field);
+                }
+
+            }
+        }
+        else
+        {
+            if (this.firstMovementDone) {
+                Field field = this.actField.nextField(Field.Direction.D);
+                if (field != null && field.isEmpty())
+                    tmp.add(field);
+            } else {
+                Field field = this.actField.nextField(Field.Direction.D);
+                if (field != null && field.isEmpty()) {
+                    tmp.add(field);
+                    field = field.nextField(Field.Direction.D);
+                    if (field != null && field.isEmpty())
+                        tmp.add(field);
+                }
+
+            }
+        }
+
+        if(this.isWhite())
+        {
+            Field nextField = this.actField.nextField(Field.Direction.LU);
+            if(nextField!=null && !nextField.isEmpty())
+                tmp.add(nextField);
+            nextField = this.actField.nextField(Field.Direction.RU);
+            if(nextField!=null && !nextField.isEmpty())
+                tmp.add(nextField);
+        }
+        else
+        {
+            Field nextField = this.actField.nextField(Field.Direction.LD);
+            if(nextField!=null && !nextField.isEmpty())
+                tmp.add(nextField);
+            nextField = this.actField.nextField(Field.Direction.RD);
+            if(nextField!=null && !nextField.isEmpty())
+                tmp.add(nextField);
+        }
+
+
+        return tmp;
+    }
+
+    public  List<Field> getFieldsInDangerChesMat()
+    {
+        return this.fieldsInDanger;
     }
 
 

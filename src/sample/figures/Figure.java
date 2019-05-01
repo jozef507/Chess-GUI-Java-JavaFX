@@ -17,6 +17,8 @@ public interface Figure
     ImageView getImage();
     void setFieldsInDanger();
     List<Field> getFieldsInDanger();
+    List<Field> getFieldsForPossMov();
+    List<Field> getFieldsInDangerChesMat();
     int getID();
     List<Field> getFieldsOfDirectionToField(Field field);
 

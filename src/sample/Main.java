@@ -19,7 +19,7 @@ public class Main extends Application {
     {
         Parent root = FXMLLoader.load(getClass().getResource("gui/gamemanager.fxml"));
         primaryStage.setTitle("Chess");
-        primaryStage.setScene(new Scene(root, 616, 417));
+        primaryStage.setScene(new Scene(root, 600, 435));
         primaryStage.show();
 
     }

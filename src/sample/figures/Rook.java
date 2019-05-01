@@ -230,4 +230,36 @@ public class Rook implements Figure
         return fieldsOfDirToField;
     }
 
+    public List<Field> getFieldsForPossMov()
+    {
+        return this.fieldsInDanger;
+    }
+
+    public  List<Field> getFieldsInDangerChesMat()
+    {
+        List<Field> tmp= new ArrayList<Field>();
+
+        tmp.addAll(appendFieldsInDangerChessMat(Field.Direction.U));
+        tmp.addAll(appendFieldsInDangerChessMat(Field.Direction.D));
+        tmp.addAll(appendFieldsInDangerChessMat(Field.Direction.R));
+        tmp.addAll(appendFieldsInDangerChessMat(Field.Direction.L));
+
+        return tmp;
+    }
+
+    private List<Field> appendFieldsInDangerChessMat(Field.Direction dir)
+    {
+        List<Field> tmp= new ArrayList<Field>();
+        Field nextField = this.actField.nextField(dir);
+        while (nextField != null)
+        {
+            tmp.add(nextField);
+            if (!nextField.isEmpty())
+                if(!(nextField.get().getID() == 0 && nextField.get().isWhite()!=this.isWhite()))
+                    break;
+            nextField = nextField.nextField(dir);
+        }
+        return tmp;
+    }
+
 }

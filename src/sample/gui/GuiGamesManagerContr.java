@@ -48,7 +48,7 @@ public class GuiGamesManagerContr implements Initializable
         newHBox.setMinHeight(89);
         newHBox.setSpacing(38);
 
-        Text text = new Text("Game path "+pathCounter);
+        Text text = new Text("Notation "+pathCounter + " path");
         TextField newField = new TextField();
         newField.setPrefWidth(430);
         newField.setPrefHeight(26);

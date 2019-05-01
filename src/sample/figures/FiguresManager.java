@@ -206,48 +206,61 @@ public class FiguresManager
 
     public boolean checkChess(boolean isWhiteOnTheMove, Figure movingFigure)
     {
-        if(isWhiteOnTheMove)
+
+        Field kingFieldBlack = this.blackKing.getActField();
+        if (this.whiteFieldsInDanger.contains(kingFieldBlack))
         {
-            Field kingField = this.blackKing.getActField();
-            if (this.whiteFieldsInDanger.contains(kingField))
-            {
-                this.blackKing.setInChess(true);
-                this.blackKing.setChessBy(movingFigure);
-                //this.chess = true;
+            this.blackKing.setInChess(true);
+            this.blackKing.setChessBy(movingFigure);
+            //this.chess = true;
 
-                return true;
-            }
-            this.blackKing.setInChess(false);
-            this.blackKing.setChessBy(null);
-
-            //this.chess = false;
-            return false;
+            return true;
         }
         else
         {
-            Field kingField = this.whiteKing.getActField();
-            if (this.blackFieldsInDanger.contains(kingField))
-            {
-                this.whiteKing.setInChess(true);
-                this.whiteKing.setChessBy(movingFigure);
+            this.blackKing.setInChess(false);
+            this.blackKing.setChessBy(null);
+        }
 
-                //this.chess = true;
 
-                return true;
-            }
-            this.whiteKing.setInChess(false);
+        //this.chess = false;
+        //return false;
+
+        Field kingFieldWhite = this.whiteKing.getActField();
+        if (this.blackFieldsInDanger.contains(kingFieldWhite))
+        {
+            this.whiteKing.setInChess(true);
             this.whiteKing.setChessBy(movingFigure);
 
-            //this.chess = false;
-            return false;
+            //this.chess = true;
+
+            return true;
         }
+        else
+        {
+            this.whiteKing.setInChess(false);
+            this.whiteKing.setChessBy(movingFigure);
+        }
+
+
+        //this.chess = false;
+        return false;
+
     }
 
     public boolean checkChessMat(boolean isWhiteOnTheMove)
     {
         if(isWhiteOnTheMove)
         {
-            if(this.blackKing.canMove(this.whiteFieldsInDanger))
+            ArrayList<Field> whiteFieldsInDangerChessMat = new ArrayList<Field>();
+            Figure tmpFigure;
+            for(int i = 0; i < activeWhiteFigures.size(); i++)
+            {
+                tmpFigure = activeWhiteFigures.get(i);
+                whiteFieldsInDangerChessMat.addAll(tmpFigure.getFieldsInDangerChesMat());
+            }
+
+            if(this.blackKing.canMove(whiteFieldsInDangerChessMat))
             {
                 this.chessMat=false;
                 return false;
@@ -293,7 +306,15 @@ public class FiguresManager
         }
         else
         {
-            if(this.whiteKing.canMove(this.blackFieldsInDanger))
+            ArrayList<Field> blackieldsInDangerChessMat = new ArrayList<Field>();
+            Figure tmpFigure;
+            for(int i = 0; i < activeBlackFigures.size(); i++)
+            {
+                tmpFigure = activeBlackFigures.get(i);
+                blackieldsInDangerChessMat.addAll(tmpFigure.getFieldsInDangerChesMat());
+            }
+
+            if(this.whiteKing.canMove(blackieldsInDangerChessMat))
             {
                 this.chessMat=false;
                 return false;
@@ -313,10 +334,16 @@ public class FiguresManager
                         int fieldOccurrences = Collections.frequency(whiteFieldsInDangerWithoutKing, field);
                         int pawnOccurrences = 0;
 
-                        if(field.nextField(Field.Direction.LD).get().getID()==5)
-                            pawnOccurrences++;
-                        if(field.nextField(Field.Direction.RD).get().getID()==5)
-                            pawnOccurrences++;
+                        Field nextField = field.nextField(Field.Direction.LD);
+                        if(nextField!=null)
+                            if(nextField.get() != null && nextField.get().getID()==5)
+                                pawnOccurrences++;
+
+                        nextField = field.nextField(Field.Direction.RD);
+                        if(nextField!=null)
+                            if(nextField.get() != null && nextField.get().getID()==5)
+                                pawnOccurrences++;
+
                         if(fieldOccurrences == pawnOccurrences)
                             continue;
                         chessmatFlag = false;
@@ -359,5 +386,30 @@ public class FiguresManager
         return this.chessMat;
     }
 
+    public Figure getLastChangedFigure () {return this.changedFigures.get(this.changedFigures.size()-1);}
+
+    public void removeLastChangedFigure () {this.changedFigures.remove(this.changedFigures.size()-1);}
+
+    public List<Figure> getActiveWhiteFigures () {return this.activeWhiteFigures;}
+
+    public List<Figure> getActiveBlackFigures () {return this.activeBlackFigures;}
+
+    public Figure getLastRemovedFigure()  { return  this.removedFigures.get(this.removedFigures.size()-1); }
+
+    public void removeLastRemovedFigure()  { this.removedFigures.remove(this.removedFigures.size()-1); }
+
+    public void  removeActiveFigure(Figure figure)
+    {
+        if(figure.isWhite())
+            this.activeWhiteFigures.remove(figure);
+        else
+            this.activeBlackFigures.remove(figure);
+
+    }
+
+    public void setChessMat(boolean is)
+    {
+        this.chessMat = is;
+    }
 
 }
