@@ -114,8 +114,6 @@ public class Pawn implements Figure
         }
 
         this.firstMovementDone = true;
-
-
         return flag;
     }
 
@@ -216,23 +214,23 @@ public class Pawn implements Figure
         this.fieldsInDanger.clear();
 
         if(this.isWhite())
-    {
-        Field nextField = this.actField.nextField(Field.Direction.LU);
-        if(nextField!=null)
-            this.fieldsInDanger.add(nextField);
-        nextField = this.actField.nextField(Field.Direction.RU);
-        if(nextField!=null)
-            this.fieldsInDanger.add(nextField);
-    }
-    else
-    {
-        Field nextField = this.actField.nextField(Field.Direction.LD);
-        if(nextField!=null)
-            this.fieldsInDanger.add(nextField);
-        nextField = this.actField.nextField(Field.Direction.RD);
-        if(nextField!=null)
-            this.fieldsInDanger.add(nextField);
-    }
+        {
+            Field nextField = this.actField.nextField(Field.Direction.LU);
+            if(nextField!=null)
+                this.fieldsInDanger.add(nextField);
+            nextField = this.actField.nextField(Field.Direction.RU);
+            if(nextField!=null)
+                this.fieldsInDanger.add(nextField);
+        }
+        else
+        {
+            Field nextField = this.actField.nextField(Field.Direction.LD);
+            if(nextField!=null)
+                this.fieldsInDanger.add(nextField);
+            nextField = this.actField.nextField(Field.Direction.RD);
+            if(nextField!=null)
+                this.fieldsInDanger.add(nextField);
+        }
 
     }
 

@@ -243,10 +243,10 @@ public class Bishop implements Figure
     {
         List<Field> tmp= new ArrayList<Field>();
 
-        tmp.addAll(appendFieldsInDangerChessMat(Field.Direction.U));
-        tmp.addAll(appendFieldsInDangerChessMat(Field.Direction.D));
-        tmp.addAll(appendFieldsInDangerChessMat(Field.Direction.R));
-        tmp.addAll(appendFieldsInDangerChessMat(Field.Direction.L));
+        tmp.addAll(appendFieldsInDangerChessMat(Field.Direction.RU));
+        tmp.addAll(appendFieldsInDangerChessMat(Field.Direction.RD));
+        tmp.addAll(appendFieldsInDangerChessMat(Field.Direction.LU));
+        tmp.addAll(appendFieldsInDangerChessMat(Field.Direction.LD));
 
         return tmp;
     }

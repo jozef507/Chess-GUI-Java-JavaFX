@@ -153,7 +153,7 @@ public class ChessGame implements Game {
                 return false;
 
         return true;
-    };
+    }
 
     public boolean setPlaybackUndoMovement(){return this.movementManager.setPlaybackUndoMovement(this.notation.getPrevNotationMovement(), this.board, this.figuresManager);}
 

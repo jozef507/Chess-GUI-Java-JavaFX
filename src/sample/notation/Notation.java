@@ -85,7 +85,8 @@ public class Notation
 
 
             NotationMovement mov = new NotationMovement();
-            mov.setNotationMovementFromString(lineArray[1]);
+            if(!mov.setNotationMovementFromString(lineArray[1]))
+                this.isRight = false;
             this.notationMovements.add(mov);
 
             if(i==0)
@@ -97,7 +98,8 @@ public class Notation
             if(lineArray.length > 2)
             {
                 mov = new NotationMovement();
-                mov.setNotationMovementFromString(lineArray[2]);
+                if(!mov.setNotationMovementFromString(lineArray[2]))
+                    this.isRight = false;
                 this.notationMovements.add(mov);
                 if(this.isLongNotation != mov.getIsLongNotation())
                     this.isRight = false;
@@ -252,5 +254,4 @@ public class Notation
         this.gameNotationLines.clear();
         this.gameNotationLines.add("Chess notation is incorrect!");
     }
-
 }

@@ -241,7 +241,6 @@ public class Queen implements Figure
         int colDiff = field.getColPos() - this.actField.getColPos();
         int rowDiff = field.getRowPos() - this.actField.getRowPos();
 
-
         Field.Direction dir;
         if (colDiff>0 && rowDiff==0)
             dir = Field.Direction.R;
@@ -259,7 +258,6 @@ public class Queen implements Figure
             dir = Field.Direction.LU;
          else if (colDiff<0 && rowDiff<0 && Math.abs(colDiff) == Math.abs(rowDiff))
             dir = Field.Direction.LD;
-
         else
             dir = Field.Direction.NONE;
 

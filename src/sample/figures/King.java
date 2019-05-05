@@ -162,12 +162,12 @@ public class King implements Figure
         return this.fieldsInDanger;
     }
 
-    public boolean canMove(List<Field> fieldsInDanger)
+    public boolean canMove(List<Field> fieldsInDangerOut)
     {
         Field nextField;
 
         nextField = this.actField.nextField(Field.Direction.U);
-        if(nextField != null && !fieldsInDanger.contains(nextField))
+        if(nextField != null && !fieldsInDangerOut.contains(nextField))
         {
             if(nextField.isEmpty())
             {
@@ -183,7 +183,7 @@ public class King implements Figure
 
 
         nextField = this.actField.nextField(Field.Direction.RU);
-        if(nextField != null && !fieldsInDanger.contains(nextField))
+        if(nextField != null && !fieldsInDangerOut.contains(nextField))
         {
             if(nextField.isEmpty())
             {
@@ -198,7 +198,7 @@ public class King implements Figure
         }
 
         nextField = this.actField.nextField(Field.Direction.R);
-        if(nextField != null && !fieldsInDanger.contains(nextField))
+        if(nextField != null && !fieldsInDangerOut.contains(nextField))
         {
             if(nextField.isEmpty())
             {
@@ -213,7 +213,7 @@ public class King implements Figure
         }
 
         nextField = this.actField.nextField(Field.Direction.RD);
-        if(nextField != null && !fieldsInDanger.contains(nextField))
+        if(nextField != null && !fieldsInDangerOut.contains(nextField))
         {
             if(nextField.isEmpty())
             {
@@ -228,7 +228,7 @@ public class King implements Figure
         }
 
         nextField = this.actField.nextField(Field.Direction.D);
-        if(nextField != null && !fieldsInDanger.contains(nextField))
+        if(nextField != null && !fieldsInDangerOut.contains(nextField))
         {
             if(nextField.isEmpty())
             {
@@ -243,7 +243,7 @@ public class King implements Figure
         }
 
         nextField = this.actField.nextField(Field.Direction.LD);
-        if(nextField != null && !fieldsInDanger.contains(nextField))
+        if(nextField != null && !fieldsInDangerOut.contains(nextField))
         {
             if(nextField.isEmpty())
             {
@@ -258,7 +258,7 @@ public class King implements Figure
         }
 
         nextField = this.actField.nextField(Field.Direction.L);
-        if(nextField != null && !fieldsInDanger.contains(nextField))
+        if(nextField != null && !fieldsInDangerOut.contains(nextField))
         {
             if(nextField.isEmpty())
             {
@@ -272,7 +272,7 @@ public class King implements Figure
             }
         }
         nextField = this.actField.nextField(Field.Direction.LU);
-        if(nextField != null && !fieldsInDanger.contains(nextField))
+        if(nextField != null && !fieldsInDangerOut.contains(nextField))
         {
             if(nextField.isEmpty())
             {

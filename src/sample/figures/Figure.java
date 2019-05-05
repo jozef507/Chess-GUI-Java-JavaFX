@@ -14,6 +14,7 @@ public interface Figure
     void setActualPosition(Field field);
     void nulActualPosition();
     Field getActField();
+
     ImageView getImage();
     void setFieldsInDanger();
     List<Field> getFieldsInDanger();

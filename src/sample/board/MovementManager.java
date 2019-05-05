@@ -27,12 +27,12 @@ public class MovementManager
 
     public MovementManager()
     {
-
         this.canPlayerPlay = true;
         this.isWhiteOnTheMove = true;
         this.isMovementCompletlySet = false;
         this.isRemovingFigure = false;
         this.isChangingFigure = false;
+
         this.startField = null;
         this.movementFigure = null;
         this.goalField = null;
@@ -56,10 +56,12 @@ public class MovementManager
         this.isMovementCompletlySet = false;
         this.isRemovingFigure = false;
         this.isChangingFigure = false;
+
         this.startField = null;
         this.movementFigure = null;
         this.goalField = null;
         this.goalFieldFigure = null;
+        this.changingFigure = null;
     }
 
     public boolean setPlayerMovement(int col, int row, Board board) {
@@ -252,17 +254,21 @@ public class MovementManager
         {
             this.goalField.remove(this.changingFigure);
             figuresManager.removeActiveFigure(this.changingFigure);
+            this.startField.put(this.movementFigure);
+            figuresManager.addActiveFigure(this.movementFigure);
         }
         else
         {
             this.goalField.remove(this.movementFigure);
+            this.startField.put(this.movementFigure);
         }
 
-        this.startField.put(this.movementFigure);
+
 
         if(this.isRemovingFigure)
         {
             this.goalField.put(this.goalFieldFigure);
+            figuresManager.addActiveFigure(this.goalFieldFigure);
         }
 
         figuresManager.setChessMat(false);

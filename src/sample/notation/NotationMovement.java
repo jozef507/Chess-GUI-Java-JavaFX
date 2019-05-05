@@ -54,7 +54,7 @@ public class NotationMovement
     }
 
 
-    public void setNotationMovementFromString(String s)
+    public boolean setNotationMovementFromString(String s)
     {
         if(s.matches("[KDVSJ]?[abcdefgh][12345678][x]?[abcdefgh][12345678][VDSJ]?[+#]?"))
         {
@@ -157,7 +157,7 @@ public class NotationMovement
             }
             else
             {
-                System.exit(1);
+                return false;
             }
         }
         else if(s.matches("[KDVSJ]?[abcdefgh12345678]?[x]?[abcdefgh][12345678][VDSJ]?[+#]?"))
@@ -260,8 +260,9 @@ public class NotationMovement
         }
         else
         {
-            System.exit(1);
+            return false;
         }
+        return true;
     }
 
     private int getFigureID(String s)
