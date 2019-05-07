@@ -11,6 +11,10 @@ import sample.notation.NotationMovement;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Trieda ktorá reprezentuje ťah partie - jeho všetky dôležité informácie:
+ * štartovacie políčko, cieľové políčko, firgúrky na týchto políčkach...
+ */
 public class MovementManager
 {
     private boolean canPlayerPlay;
@@ -25,6 +29,9 @@ public class MovementManager
     private Figure goalFieldFigure;
     private Figure changingFigure;
 
+    /**
+     * Inicializuje ťah partie.
+     */
     public MovementManager()
     {
         this.canPlayerPlay = true;
@@ -40,18 +47,32 @@ public class MovementManager
         this.changingFigure = null;
     }
 
+    /**
+     * Vracia štartovacie políčko ťahu.
+     * @return Odkaz na štartovacie políčko.
+     */
     public Field getGoalField() {
         return this.goalField;
     }
 
+    /**
+     * Zmení hráča, ktorý je na ťahu.
+     */
     public void changePlayer() {
         this.isWhiteOnTheMove = !isWhiteOnTheMove;
     }
 
+    /**
+     * Nastaví informáciu o tom či môže užívateľ previesť vlastný ťah.
+     * @param canPlayerPlay
+     */
     public void setCanPlayerPlay(boolean canPlayerPlay) {
         this.canPlayerPlay = canPlayerPlay;
     }
 
+    /**
+     * Vynuluje informácie o ťahu a tým prípráví aplikáciu na ďalší ťah.
+     */
     public void nullMovementManager() {
         this.isMovementCompletlySet = false;
         this.isRemovingFigure = false;
@@ -64,6 +85,15 @@ public class MovementManager
         this.changingFigure = null;
     }
 
+    /**
+     * Nastavuje ťah ktorý sa má vykonať. Nastavuje štartovacie a cieľove políčko.
+     * Ak je ťah vynulovaný a povola sa metóda tak sa nastaví štartovacie políčko ak nie nastavuje
+     * sa cieľové políčko.
+     * @param col Stlpec políčka.
+     * @param row Riadok políčka.
+     * @param board Šachovníca.
+     * @return Úspešnosť nastavenia.
+     */
     public boolean setPlayerMovement(int col, int row, Board board) {
         if (!canPlayerPlay) {
             return false;
@@ -97,6 +127,15 @@ public class MovementManager
     }
 
 
+    /**
+     * Nastavuje prehrávaný ťah ktorý sa má vykonať. Nastavuje štartovacie a cieľove políčko.
+     * Ak je ťah vynulovaný a povola sa metóda tak sa nastaví štartovacie políčko ak nie nastavuje
+     * sa cieľové políčko. Tieto políčka sa získavajú z notácie šachovej partie.
+     * @param board Šachovnica.
+     * @param notation Notácia partie.
+     * @param figuresManager Manažer aktívnych figúrok.
+     * @return Úspešnosť nastavenia.
+     */
     public boolean setPlaybackMovement(Board board, Notation notation, FiguresManager figuresManager) {
 
         if(this.isChangingFigure)
@@ -179,6 +218,12 @@ public class MovementManager
         return true;
     }
 
+    /**
+     * Vykoná už nastavený ťah prostredníctvom rozhrania na figúrku ktorý sa má presúvať.
+     * Následne otestuje návratovú hodnotu od figúrky a nastavý ďalšie dôležíte informácie o ťahu.
+     * @param figuresManager Manažer aktívnych figúrok.
+     * @return Úspešnosť ťahu.
+     */
     public boolean performMovement(FiguresManager figuresManager) {
         if (this.startField != null && this.movementFigure != null && this.goalField != null)
         {
@@ -217,6 +262,13 @@ public class MovementManager
         }
     }
 
+    /**
+     * Nastaví prehravaný ťah do predu. Informácie o ťahu sa získavajú z notácie partie.
+     * @param mov Ťah repretentovaný notáciou.
+     * @param board Šachovnica.
+     * @param figuresManager Manažer aktívných figúrok.
+     * @return Úspešnosť nastavenia.
+     */
     public boolean setPlaybackUndoMovement(NotationMovement mov, Board board, FiguresManager figuresManager)
     {
         this.startField = board.getField(mov.getStartFieldCol(), mov.getStartFieldRow());
@@ -248,6 +300,12 @@ public class MovementManager
         return true;
     }
 
+    /**
+     * Vykoná už nastavený ťah dozadu.
+     * @param mov Ťah reprezentovaný notáciou.
+     * @param figuresManager Manažer aktívnych figúrok.
+     * @return Úspešnosť ťahu.
+     */
     public boolean performPlaybackUndoMovement(NotationMovement mov, FiguresManager figuresManager)
     {
         if(this.isChangingFigure)
@@ -275,30 +333,62 @@ public class MovementManager
         return true;
     }
 
+    /**
+     * Vracia figúrku ktorá nahrádza pešiaka.
+     * @return Odkaz na figúrku.
+     */
     public Figure getChangingFigure()
     {
         return this.changingFigure;
     }
 
 
+    /**
+     * Vracia figúrku ktorej ťah sa vykonáva.
+     * @return Odkaz na figúrku.
+     */
     public Figure getMovementFigure() {
         return this.movementFigure;
     }
 
+    /**
+     * Vracia figúrku ktorej ťah sa vykonáva.
+     * @return Odkaz na figúrku.
+     */
     public Figure getGoalFieldFigure() {
         return this.goalFieldFigure;
     }
 
+    /**
+     * Vracia informáciu o tom či je na ťahu práve biely hráč.
+     * @return Pravdivostna informácia.
+     */
     public boolean isWhiteOnTheMove() {
         return this.isWhiteOnTheMove;
     }
 
+    /**
+     * Vracia informáciu o tom či je ťah kompletne nastavený (či už je nastavené aj cieľové políčko).
+     * @return Pravdivostna informácia.
+     */
     public boolean isMovementCompletlySet() {return this.isMovementCompletlySet;}
 
+    /**
+     * Vracia informáciu o tom či dochádza k vyhodeniu figúrky.
+     * @return Pravdivostna informácia.
+     */
     public boolean getIsRemovingFigure () {return this.isRemovingFigure;}
 
+    /**
+     * Vracia informáciu o tom či dochádza k zámene pešiaka.
+     * @return Pravdivostna informácia.
+     */
     public boolean getIsChangingFigure() {return this.isChangingFigure;}
 
+    /**
+     * Vracia štartovacie políčko ťahu.
+     * @return Odkaz na políčko.
+     */
     public Field getStartField () { return this.startField;}
 
 

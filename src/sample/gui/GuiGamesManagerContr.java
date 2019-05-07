@@ -15,6 +15,10 @@ import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * Trieda, ktorá je controllerom(riadí tento grafický návrh) grafického
+ * návrhu obsiahnutom v súbore gamemanager.fxml.
+ */
 public class GuiGamesManagerContr implements Initializable
 {
 
@@ -31,6 +35,10 @@ public class GuiGamesManagerContr implements Initializable
         pathCounter = 1;
     }
 
+    /**
+     * Definuje akciu po kliknutí na tlačítko Add.
+     * @param actionEvent
+     */
     public void AddButtonClick(ActionEvent actionEvent)
     {
         infoText.setVisible(false);
@@ -65,6 +73,10 @@ public class GuiGamesManagerContr implements Initializable
 
     }
 
+    /**
+     * Definuje akciu po kliknutí na tlačitko Remove.
+     * @param actionEvent
+     */
     public void RemoveButtonClick(ActionEvent actionEvent)
     {
         infoText.setVisible(false);
@@ -84,6 +96,9 @@ public class GuiGamesManagerContr implements Initializable
         pathCounter--;
     }
 
+    /**
+     * Definuje akciu po kliknutí na tlačítko Submit.
+     */
     public void SubmitButtonClick()
     {
         infoText.setVisible(false);

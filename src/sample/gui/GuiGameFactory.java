@@ -4,11 +4,18 @@ import javafx.scene.Scene;
 import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
 
+/**
+ * Pomocná abstraktna trieda, ktorá vytvára potrebné taby šachových partií.
+ */
 public abstract class GuiGameFactory
 {
     public static String[] stringFilepathArray;
     public static int counter = 0;
 
+    /**
+     * Vytvrára potrebné taby šachových partií.
+     * @param filepathArray
+     */
     public static void createChessScreen(String[] filepathArray)
     {
         // set title for the stage

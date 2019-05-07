@@ -5,6 +5,10 @@ import sample.board.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Trieda reprezentujúca figúrku strelca.
+ * Implementuje rozhranie Figure.
+ */
 public class Bishop implements Figure
 {
     private int ID;
@@ -14,7 +18,11 @@ public class Bishop implements Figure
     private ImageView image;
     private List<Field> fieldsInDanger;
 
-
+    /**
+     * Inicializacia strelca.
+     * @param isWhite Informacia o farbe.
+     * @param image Obrázok figúrky používaný v grafickom rozhraní.
+     */
     public Bishop(boolean isWhite, ImageView image)
     {
         this.ID = 2;
@@ -24,12 +32,20 @@ public class Bishop implements Figure
         this.fieldsInDanger = new ArrayList<Field>();
     }
 
+    /**
+     * Vracia odkaz na obrázok figúrky používajucí v grafickom rozhraní.
+     * @return Odkaz na obrázok.
+     */
     public ImageView getImage()
     {
         return this.image;
     }
 
 
+    /**
+     * Vracia informáciu o tom či je figúrka biela. Ak nie je čierna.
+     * @return Pravdivostna hodnota.
+     */
     public boolean isWhite()
     {
         return this.isBishopWhite;
@@ -48,18 +64,35 @@ public class Bishop implements Figure
         return super.equals(obj);
     }
 
+    /**
+     * Nastaví aktuálnu pozíciu figúrky.
+     * @param field Políčko pozície na ktorú sa má figurka nastaviť.
+     */
     public void setActualPosition(Field field) { this.actField = field; }
 
+    /**
+     * Vynulovanie/zrušenie aktualnej pozície figúrky.
+     */
     public void nulActualPosition()
     {
         this.actField = null;
     }
 
+    /**
+     * Vráti pozíciu aktualnej pozície figúrky.
+     * @return Odkaz na políčko.
+     */
     public Field getActField()
     {
         return this.actField;
     }
 
+    /**
+     * Vykonáva ťah figúrky a zároveń testuje či je ťah možný.
+     * @param moveTo Cieľove políčko ťahu.
+     * @param figuresManager Manažer aktívnych figúrok.
+     * @return Stav úspešnosti ťahu.
+     */
     public int move(Field moveTo, FiguresManager figuresManager)
     {
         if(this.actField == null)
@@ -104,6 +137,15 @@ public class Bishop implements Figure
         return flag;
     }
 
+    /**
+     * Testuje či je ťah na cieľove políčko možný.
+     * @param actCol Stlpec aktuálneho polička.
+     * @param actRow Riadok aktualneho políčka.
+     * @param moveTo Cieľové políčko.
+     * @param movetoCol Stlpec aktuálneho polička.
+     * @param movetoRow Riadok aktualneho políčka.
+     * @return Pravdivostná hodnota.
+     */
     private boolean isMovementPossible(int actCol, int actRow, Field moveTo, int movetoCol, int movetoRow)
     {
         int colDiff = Math.abs(movetoCol-actCol);
@@ -155,6 +197,12 @@ public class Bishop implements Figure
         return true;
     }
 
+    /**
+     * Skontroluje polička v danom smere, či sa tam nenachádza iná figúrka.
+     * @param dir Smer na šachovnici.
+     * @param diff Rozdiel políčok ktorý treba otestovať.
+     * @return Pravdivostna hodnota.
+     */
     private boolean checkDirection(Field.Direction dir, int diff)
     {
         Field nextField=this.actField;
@@ -167,7 +215,9 @@ public class Bishop implements Figure
         return true;
     }
 
-
+    /**
+     * Nastaví pre figúrku všetky políčka ktoré táto figúrka ohrozuej.
+     */
     public void setFieldsInDanger()
     {
         this.fieldsInDanger.clear();
@@ -177,6 +227,10 @@ public class Bishop implements Figure
         this.appendFieldsInDanger(Field.Direction.LD);
     }
 
+    /**
+     * Pridá polička v danom smere.
+     * @param dir Smer na šachovnici.
+     */
     private void appendFieldsInDanger(Field.Direction dir)
     {
         Field nextField=this.actField.nextField(dir);
@@ -190,13 +244,26 @@ public class Bishop implements Figure
 
     }
 
+    /**
+     * Vracia štruktúru políčok ktoré figúrka ohrozuje.
+     * @return Štruktúra políčok.
+     */
     public List<Field> getFieldsInDanger()
     {
         return this.fieldsInDanger;
     }
 
+    /**
+     * Vracia id figúrky.
+     * @return ID figúrky.
+     */
     public int getID() {return this.ID;}
 
+    /**
+     * Vráti štruktúru všetkych políčok smerujúcich k danému fieldu v parametri.
+     * @param field Odkaz na field.
+     * @return Štruktúra políčok.
+     */
     public List<Field> getFieldsOfDirectionToField(Field field)
     {
         if(!this.fieldsInDanger.contains(field))
@@ -234,11 +301,19 @@ public class Bishop implements Figure
         return fieldsOfDirToField;
     }
 
+    /**
+     * Vracia štruktúru všetkých políčok ktorými môže ohrozovať súperoveho kráľa.
+     * @return Štruktúra políčok.
+     */
     public List<Field> getFieldsForPossMov()
     {
         return this.fieldsInDanger;
     }
 
+    /**
+     * Vracia štruktúru všetkých políčok ktorými môže figúrka vytvárať šachmat.
+     * @return Štruktúra políčok.
+     */
     public  List<Field> getFieldsInDangerChesMat()
     {
         List<Field> tmp= new ArrayList<Field>();
@@ -251,6 +326,10 @@ public class Bishop implements Figure
         return tmp;
     }
 
+    /**
+     * Pridá polička v danom smere.
+     * @param dir Smer na šachovnici.
+     */
     private List<Field> appendFieldsInDangerChessMat(Field.Direction dir)
     {
         List<Field> tmp= new ArrayList<Field>();

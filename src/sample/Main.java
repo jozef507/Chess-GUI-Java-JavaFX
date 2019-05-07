@@ -12,6 +12,9 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
+/**
+ * Trieda main pre spustenie grafickej aplikácie.
+ */
 public class Main extends Application {
 
     @Override

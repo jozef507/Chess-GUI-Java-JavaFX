@@ -1,15 +1,23 @@
 package sample.board;
 import sample.figures.Figure;
 
+/**
+ * Rozhranie pre políčko na šachovnici.
+ */
 public interface Field
 {
+    /**
+     * Vyčtový typ všetkých možných smerov na šachovnici.
+     */
     enum Direction
     {
         D, L, LD, LU, R, RD, RU, U, NONE
-
     }
 
-
+    /**
+     * Spracuje pole všetkých smerov na šachovnici.
+     * @return Dané pole.
+     */
     static Direction[] myValues()
     {
         Direction[] directions = { Direction.D, Direction.L, Direction.LD, Direction.LU,
@@ -17,8 +25,6 @@ public interface Field
 
         return directions;
     }
-
-
 
 
 
@@ -51,13 +57,56 @@ public interface Field
     }
 
 
+    /**
+     * Vráti pozíciu stlpca na šachovnici tohto políčka.
+     * @return Hodnotu slpca.
+     */
     int getColPos();
+
+    /**
+     * Vráti pozíciu riadka na šachovnici tohto políčka.
+     * @return Hodnotu riadka.
+     */
     int getRowPos();
+
+    /**
+     * Pridáva políčku susedné políčko v smere na šachovnici.
+     * @param dirs Smer na šachovnici.
+     * @param field Plíčko ktoré prídá ako susedné.
+     */
     void addNextField(Direction dirs, Field field);
+
+    /**
+     * Vráti figúrku ležiacu na danom políčku.
+     * @return Odkaz na figúrku.
+     */
     Figure get();
+
+    /**
+     * Testovanie či je dané políčko prázdne.
+     * @return Úspešnosť testu.
+     */
     boolean isEmpty();
+
+    /**
+     * Vracia susedné políčko tohto políčka v danom smere.
+     * @param dirs Smer na šachovnici.
+     * @return Odkaz na políčko.
+     */
     Field nextField(Direction dirs);
+
+    /**
+     * Vloží danú figúrku na toto políčko a testuje úspešnosť tohto úkonu.
+     * @param figure Figúrka ktorá má byť vložená na políčko.
+     * @return Úspešnosť testu.
+     */
     boolean put(Figure figure);
+
+    /**
+     * Odstráni danú figúrku z tohto políčka a testuje úspešnosť tohto úkonu.
+     * @param figure Figúrka ktorá má byť odstránená z políčka.
+     * @return Úspešnosť testu.
+     */
     boolean remove(Figure figure);
 
 }

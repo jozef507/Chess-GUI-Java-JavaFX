@@ -30,6 +30,10 @@ import java.util.*;
 import sample.board.MovementManager;
 import sample.game.*;
 
+/**
+ * Trieda, ktorá je controllerom(riadí tento grafický návrh) grafického
+ * návrhu obsiahnutom v súbore chessboard.fxml.
+ */
 public class GuiGameContr implements Initializable
 {
     private Game game;
@@ -156,7 +160,12 @@ public class GuiGameContr implements Initializable
     @FXML
     public TextField textField ;
 
-
+    /**
+     * Inicializačná metóda ktorá sa vykoná hneď pri inicializacii gui.
+     * Definuje niektoré správanie niektorých grafických komponentov pre začiatok partie.
+     * @param location
+     * @param resources
+     */
     public void initialize(URL location, ResourceBundle resources)
     {
         ImageView[] whiteFiguresImagesArray = createWhiteFigureImagesArray();
@@ -182,6 +191,7 @@ public class GuiGameContr implements Initializable
         setCursorForImages(whiteFiguresImages, Cursor.HAND);
         setCursorForImages(blackFiguresImages, Cursor.DISAPPEAR);
 
+
         board.setPickOnBounds(true);
         board.setOnMouseClicked(e -> {
             onBoardClick(e.getX(), e.getY());
@@ -190,7 +200,7 @@ public class GuiGameContr implements Initializable
 
         buttonRookWhite.setOnMouseClicked(e -> {
             this.newRookWhite();
-            hideChangingFigures();
+            hideChangingFigures(); // ukryje tlačitka s vyberom novej figurky.
             this.closePlayerMovement();
         });
 
@@ -247,7 +257,9 @@ public class GuiGameContr implements Initializable
 
     }
 
-
+    /**
+     * Metód ktorá graficky zmení resp. zvýrazní hráča (jeho figúrky), ktorý je na ťahu.
+     */
     private void guiChangePlayer()
     {
         if(this.game.isWhiteOnTheMove())
@@ -266,6 +278,12 @@ public class GuiGameContr implements Initializable
         }
     }
 
+    /**
+     * Metóda nastaví nepriehľadnosť podľa parametra opacity, všetkým obrázkom ktoré sa nachádzajú v parametru
+     * ArrayListu images.
+     * @param images
+     * @param opacity
+     */
     private void setOpacityForImages(List<ImageView> images, double opacity)
     {
         int size = images.size();
@@ -275,6 +293,12 @@ public class GuiGameContr implements Initializable
         }
     }
 
+    /**
+     * Metóda nastavuje cursor podľa parametra cursor pre vštký obrázky v ArrayListe images, ktorý je parametrom
+     * funkcie.
+     * @param images
+     * @param cursor
+     */
     private void setCursorForImages(List<ImageView> images, Cursor cursor)
     {
         int size = images.size();
@@ -284,21 +308,38 @@ public class GuiGameContr implements Initializable
         }
     }
 
+
+    /**
+     * Definuje akciu, ktorá sa prevedie po kliknuti na oblasť šachovnice. Ako parametre sú vkladané hodnoty
+     * (súradnice) kliknutia na šachovnicu. Z nich sa pomocou pomocných metód vypočíta políčko na ktoré užívateľ klikol.
+     * Následne sa táto informácia pomocou rozhrania game predá logike aplikácie. V prípade že bolo kliknuté aj na
+     * cieľove políčko, prevedie sa v logike aplikacie ťah daný užívateľom a ak ťah prebehne úspešne, prevedie sa ťah
+     * aj graficky. Na koniec sa už len vykonajú úkony pre zmenu hráča či už v logike alebo grafickom rozhraní tejto
+     * aplikácie.
+     * @param clickX
+     * @param clickY
+     */
     private void onBoardClick(double clickX, double clickY)
     {
         System.out.println("["+getGuiFieldOnClickX(clickX)+", "+getGuiFieldOnClickY(clickY)+"]");
 
         int clickedX = getGuiFieldOnClickX(clickX);
         int clickedY = getGuiFieldOnClickY(clickY);
-        if(clickedX != -1 && clickedY != -1)
+
+
+        if(clickedX != -1 && clickedY != -1)  // kontrola či uzivatel klikol na platne políčko
         {
+
             if(game.setPlayerMovement(clickedX, clickedY) && game.isMovementCompletlySet())
             {
+
                 boolean flagPerformMovement = game.performPlayerMovement();
                 if(flagPerformMovement)
                 {
+                    //metoda guiMoveFigureImage, iba graficky presunie figurku na spravne miesto
                     guiMoveFigureImage(game.getImageOfMovFigure(), game.getGoalField().getColPos(), game.getGoalField().getRowPos());
                     board.setDisable(true);
+
 
                     if(game.isRemovingFigure())
                         game.getImageOfGoalFieldFigure().setOpacity(0.35);
@@ -308,8 +349,10 @@ public class GuiGameContr implements Initializable
                     if(game.getIsChangingFigure())
                     {
                         timeline = new Timeline(new KeyFrame(Duration.millis((100*this.fieldDiff)+10), ev -> {
+
                             if(game.isRemovingFigure())
                                 game.getImageOfGoalFieldFigure().setVisible(false);
+
                             board.setDisable(false);
                             showChangingFigures();
                             //timeline.cancel();
@@ -318,14 +361,14 @@ public class GuiGameContr implements Initializable
                     else
                     {
                         timeline = new Timeline(new KeyFrame(Duration.millis((100*this.fieldDiff)+10), ev -> {
+
                             if(game.isRemovingFigure())
                                 game.getImageOfGoalFieldFigure().setVisible(false);
+
                             board.setDisable(false);
                             this.closePlayerMovement();
-                            //timeline.cancel();
                         }));
                     }
-                    //timer.schedule(task, (100*this.fieldDiff)+10);
                     timeline.play();
                 }
                 else
@@ -333,10 +376,16 @@ public class GuiGameContr implements Initializable
                     game.nullMovementManager();
                 }
             }
-
         }
     }
 
+    /**
+     * Pomocná metóda, ktorá graficky presunie figúrku(parameter image) na šachovnici na poličko ktoré je difinované
+     * parametrami zvyšnými dvomi parametrami. Tento úkon sa vykonáva pomocou animacie TranslateTransition.
+     * @param image
+     * @param toFieldX
+     * @param toFieldY
+     */
     private void guiMoveFigureImage(ImageView image, int toFieldX, int toFieldY)
     {
         System.out.println("to: " +image.getTranslateX() +" " + image.getTranslateY());
@@ -367,7 +416,12 @@ public class GuiGameContr implements Initializable
         }
     }
 
-
+    /**
+     * Pomocná metóda pre vypísanie notácie v grafickom rozhraní v textovom poli na to určenom. Zároveň sa
+     * červenou farbou zvýrazni riadok, ktorý je definovaný parametrom lineToLight.
+     * @param arrayList
+     * @param lineToLight
+     */
     private void setTextArea(List<String> arrayList, int lineToLight)
     {
         int size = arrayList.size();
@@ -391,6 +445,10 @@ public class GuiGameContr implements Initializable
             this.scrollbar.setVvalue(((double) lineToLight/((double)size+1)));
     }
 
+    /**
+     * Pomocná metóda pre zobrazenie tlačítok s možnými figúrkami ktorými môže hráč nahradiť pešiaka v prípade, že
+     * sa hráčov pešiak dostane na druhý koniec šachovnice.
+     */
     private void showChangingFigures()
     {
         if(this.game.isWhiteOnTheMove())
@@ -407,6 +465,9 @@ public class GuiGameContr implements Initializable
         }
     }
 
+    /**
+     * Pomocná metóda pre skrytie (zrušenie zobrazenia) tlačítok s možnými figúrkami, ktorými je možne nahradiť pešiaka.
+     */
     private void hideChangingFigures()
     {
         if(this.game.isWhiteOnTheMove())
@@ -423,6 +484,10 @@ public class GuiGameContr implements Initializable
         }
     }
 
+    /**
+     * Volá sa po vlastnom ťahu hráča. Nastaví všetko potrebné v logike ale aj grafickom rozhraní aplikacie
+     * pre zmenú hráča ktorý je na ťahu.
+     */
     private void closePlayerMovement()
     {
         game.addPlayerNotationMovement();
@@ -434,18 +499,28 @@ public class GuiGameContr implements Initializable
         this.buttonCheckment();
     }
 
-
+    /**
+     * Volá sa po prehranom ťahu hráča (redo, play). Nastaví všetko potrebné v logike ale aj grafickom rozhraní aplikacie
+     * pre zmenú hráča ktorý je na ťahu.
+     */
     private void closePlaybackMovement()
     {
+
         game.completeNotationMovement();
         game.nullMovementManager();
         game.changePlayer();
+
+        //gui -> graficke vyznačenie zmeny hráča a kontrola pre odstavenie tlačitok vprípade potreby
         guiChangePlayer();
         this.buttonCheckment();
     }
 
 
-
+    /**
+     * Definuje čo sa stane po kliknutí na tlačítko Save.
+     * V prípade úspešneho uloženia súboru, vyhodí informačné dialógove okno o úspešnosti uloženia.
+     * @param actionEvent
+     */
     @FXML
     public void savaButtonOnClick(ActionEvent actionEvent)
     {
@@ -453,21 +528,37 @@ public class GuiGameContr implements Initializable
             getInfoDialgo("Notation saved successfully!");
         else
             getInfoDialgo("Notation saved umsuccessfully!");
-
     }
 
+
+    /**
+     * Definuje čo sa stane po kliknutí na tlačítko Undo.
+     * Povolá metódu ktorá uskutoční krok do zadu.
+     * @param actionEvent
+     */
     @FXML
     public void undoButtonOnClick(ActionEvent actionEvent)
     {
         this.playbackUndoMovement(false);
     }
 
+    /**
+     * Definuje čo sa stane po kliknutí na tlačítko Redo.
+     * Povolá metódu ktorá uskutoční prehrávaný krok dopredu.
+     * @param actionEvent
+     */
     @FXML
     public void redoButtonOnClick(ActionEvent actionEvent)
     {
         playbackMovement(false, 15);
     }
 
+    /**
+     * Definuje čo sa stane po kliknutí na tlačítko Play.
+     * Z grafického rozhrania získa informáciu o prestávke medzi jednotlívimi ťahmi a následne zavolá metódu
+     * pre prehrávanie kroku dopredu (redo) s tým že ju povolá pre rekurzívne volanie.
+     * @param actionEvent
+     */
     @FXML
     public void playButtonOnClick(ActionEvent actionEvent)
     {
@@ -488,16 +579,25 @@ public class GuiGameContr implements Initializable
         if (delay<10)
             delay=10;
 
-        playbackMovement(true,delay);
+        playbackMovement(true, delay);
 
     }
 
+    /**
+     * Definuje čo sa stane po kliknutí na tlačítko Restart.
+     * Povolá metódu ktorá uskutoční krok do zadu s tým že je nastavená pre rekurzívne vykonávanie.
+     */
     public void restartButtonOnCLick()
     {
         this.backRecur = true;
         this.playbackUndoMovement(true);
     }
 
+    /**
+     * Definuje čo sa stane po kliknutí na tlačítko Stop.
+     * Nastaví premennú ktorá vedie rekurzívne volanie metódy pre krok dopredu. Rúší rekurziu.
+     * @param actionEvent
+     */
     @FXML
     public void stopButtonOnClick(ActionEvent actionEvent)
     {
@@ -507,6 +607,10 @@ public class GuiGameContr implements Initializable
         playButton.setDisable(false);
     }
 
+    /**
+     * Pomocná metóda pre vystavenie dialogoveho okna s danou informačnou správou pre užívateľa.
+     * @param infoMessage
+     */
     public void getInfoDialgo(String infoMessage)
     {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -516,25 +620,41 @@ public class GuiGameContr implements Initializable
         alert.showAndWait();
     }
 
+    /**
+     * Metóda uskutočňuje prehrávany krok do predu. V prípade že je nastavený paramenter recursive
+     * na true táto metodá sa rekurzivne volá (využívane pri play) s určitou prestávkou medzi ťahmi.
+     * Najprv sa pomocou rozhrania game (logika aplikacie) nastavý ťah a hneď sa aj vykoná. Pri jeho úspešnom
+     * uskutočnení sa vykoná aj v grafickom rozhraní. Na koniec prebehnú všetky potrebné úkony pre prípravu na ďalší
+     * ťah.
+     * @param recursive
+     * @param delay
+     */
     private void playbackMovement(boolean recursive, double delay)
     {
         if(game.setPlaybackMovement())
         {
+
             boolean flagPerformMovement = game.performPlaybackMovement();
             if(flagPerformMovement)
             {
+
+                //grafické presunutie figurky
                 guiMoveFigureImage(game.getImageOfMovFigure(), game.getGoalField().getColPos(), game.getGoalField().getRowPos());
                 board.setDisable(true);
                 redoButton.setDisable(true);
                 undoButton.setDisable(true);
                 restartButton.setDisable(true);
                 saveButton.setDisable(true);
+
+                //kontrola či bola vyhodena figurka
                 if(game.isRemovingFigure())
                     game.getImageOfGoalFieldFigure().setOpacity(0.35);
 
 
                 Timeline timeline;
                 timeline = new Timeline(new KeyFrame(Duration.millis((100*this.fieldDiff)+delay), ev -> {
+
+                    //kontrola či bola vyhodena figurka
                     if(game.isRemovingFigure())
                         game.getImageOfGoalFieldFigure().setVisible(false);
                     board.setDisable(false);
@@ -542,6 +662,7 @@ public class GuiGameContr implements Initializable
                     undoButton.setDisable(false);
                     restartButton.setDisable(false);
                     saveButton.setDisable(false);
+
 
                     if(game.getIsChangingFigure())
                     {
@@ -552,19 +673,18 @@ public class GuiGameContr implements Initializable
                         else if(id==4 && !this.game.isWhiteOnTheMove())
                             this.newRookBlack();
                         else if(id==3 && this.game.isWhiteOnTheMove())
-                            this.newBishopWhite();
-                        else if(id==3 && !this.game.isWhiteOnTheMove())
-                            this.newBishopBlack();
-                        else if(id==2 && this.game.isWhiteOnTheMove())
                             this.newKnightWhite();
-                        else if(id==2 && !this.game.isWhiteOnTheMove())
+                        else if(id==3 && !this.game.isWhiteOnTheMove())
                             this.newKnightBlack();
+                        else if(id==2 && this.game.isWhiteOnTheMove())
+                            this.newBishopWhite();
+                        else if(id==2 && !this.game.isWhiteOnTheMove())
+                            this.newBishopBlack();
                         else if(id==1 && this.game.isWhiteOnTheMove())
                             this.newQueenWhite();
                         else if(id==1 && !this.game.isWhiteOnTheMove())
                             this.newQueenBlack();
                     }
-
 
                     this.game.incrementIndexOfNotationLines();
                     setTextArea(game.getGameNotation(), game.getIndexOfGameNotation()+1);
@@ -581,7 +701,12 @@ public class GuiGameContr implements Initializable
         }
     }
 
-
+    /**
+     * Uskutočňuje krok dozadu, ktorý je nastavený aj vykonaný v logike. V prípade úspešneho vykonania sa vykoná aj
+     * v v grafickom rozhraní. V prípade nastavenia parametru recur sa vykonáva metóda rekurzívne (využívané pri
+     * restarte partii). Na konci sa vykonajú všetky potrebne úkony pre prípravu aplikacie na ďalší ťah.
+     * @param recur
+     */
     private void playbackUndoMovement(boolean recur)
     {
         if(game.setPlaybackUndoMovement())
@@ -589,6 +714,7 @@ public class GuiGameContr implements Initializable
             boolean flagPerformMovement = game.performPlaybackUndoMovement();
             if(flagPerformMovement)
             {
+                //kontorla či došlo k zamene figurky pre potreby gui
                 if(game.getMovementManager().getIsChangingFigure())
                 {
                     this.board.getChildren().remove(game.getMovementManager().getChangingFigure().getImage());
@@ -599,6 +725,7 @@ public class GuiGameContr implements Initializable
                     game.getMovementManager().getMovementFigure().getImage().setVisible(true);
                 }
 
+                //gui- nastavenie pozicie obrazka figurky
                 ImageView image = game.getMovementManager().getMovementFigure().getImage();
                 int fromFieldX = getGuiFieldOfImageX(image.getLayoutX());
                 int fromFieldY = getGuiFieldOfImageY(image.getLayoutY());
@@ -607,18 +734,18 @@ public class GuiGameContr implements Initializable
                 image.setTranslateX(toX);
                 image.setTranslateY(toY);
 
+                //kontola či bola vyhodena v tomto ťahu figurka, pre potreby gui
                 if(game.getMovementManager().getIsRemovingFigure())
                 {
                     game.getMovementManager().getGoalFieldFigure().getImage().setVisible(true);
                 }
 
-
                 game.decrementIndexOfNotationLines();
                 setTextArea(game.getGameNotation(), game.getIndexOfGameNotation()+1);
                 game.nullMovementManager();
-                //game.changePlayer();
-                //guiChangePlayer();
+                //kontola tlačitok a ich odstavenie v prípade potreby
                 this.buttonCheckment();
+                //recurzivne volanie metody v prípade tlačitka reset
                 if(this.backRecur && recur)
                     playbackUndoMovement(recur);
 
@@ -630,7 +757,9 @@ public class GuiGameContr implements Initializable
         }
     }
 
-
+    /**
+     * Spristupňuje a snepristupňuje tlačítka v grafickom rozhraní, podľa aktuálneho stavu partie/aplikacie.
+     */
     private void buttonCheckment()
     {
         if(this.game.isLastIndexOfNotation())
@@ -660,6 +789,10 @@ public class GuiGameContr implements Initializable
             undoButton.setDisable(false);
     }
 
+    /**
+     * Pomocná metóda, ktorá v prípade výmeny pešiaka za novú figúrku, vytvorí túto nový figurku aj v grafickom rozhraní.
+     * @param imageView
+     */
     private void newFigureImageOnBoard(ImageView imageView)
     {
         double lX = game.getGoalField().get().getImage().getLayoutX();
@@ -677,26 +810,37 @@ public class GuiGameContr implements Initializable
         imageView.setTranslateY(tY);
 
     }
+
+    /**
+     * Vytvorenie novej figúrky graficky aj v logike programu.
+     * Figúrka: biela veža.
+     */
     private void newRookWhite()
     {
         ImageView imageView = new ImageView("sample/images/rook_white.png");
-
         this.newFigureImageOnBoard(imageView);
 
         game.createNewFigure(imageView, 4);
         this.whiteFiguresImages.add(imageView);
     }
 
+    /**
+     * Vytvorenie novej figúrky graficky aj v logike programu.
+     * Figúrka: biely jazdec.
+     */
     private void newKnightWhite()
     {
         ImageView imageView = new ImageView("sample/images/knight_white.png");
-
         this.newFigureImageOnBoard(imageView);
 
         game.createNewFigure(imageView, 3);
         this.whiteFiguresImages.add(imageView);
     }
 
+    /**
+     * Vytvorenie novej figúrky graficky aj v logike programu.
+     * Figúrka: biely strelec.
+     */
     private void newBishopWhite()
     {
         ImageView imageView = new ImageView("sample/images/bishop_white.png");
@@ -707,6 +851,10 @@ public class GuiGameContr implements Initializable
         this.whiteFiguresImages.add(imageView);
     }
 
+    /**
+     * Vytvorenie novej figúrky graficky aj v logike programu.
+     * Figúrka: biela dáma.
+     */
     private void newQueenWhite()
     {
         ImageView imageView = new ImageView("sample/images/queen_white.png");
@@ -718,6 +866,10 @@ public class GuiGameContr implements Initializable
         this.whiteFiguresImages.add(imageView);
     }
 
+    /**
+     * Vytvorenie novej figúrky graficky aj v logike programu.
+     * Figúrka: čierna veža.
+     */
     private void newRookBlack()
     {
         ImageView imageView = new ImageView("sample/images/rook_dark.png");
@@ -728,6 +880,11 @@ public class GuiGameContr implements Initializable
         this.whiteFiguresImages.add(imageView);
     }
 
+
+    /**
+     * Vytvorenie novej figúrky graficky aj v logike programu.
+     * Figúrka: čierny jazdec.
+     */
     private void newKnightBlack()
     {
         ImageView imageView = new ImageView("sample/images/knight_dark.png");
@@ -738,6 +895,10 @@ public class GuiGameContr implements Initializable
         this.whiteFiguresImages.add(imageView);
     }
 
+    /**
+     * Vytvorenie novej figúrky graficky aj v logike programu.
+     * Figúrka: čierny strelec.
+     */
     private void newBishopBlack()
     {
         ImageView imageView = new ImageView("sample/images/bishop_dark.png");
@@ -748,6 +909,10 @@ public class GuiGameContr implements Initializable
         this.whiteFiguresImages.add(imageView);
     }
 
+    /**
+     * Vytvorenie novej figúrky graficky aj v logike programu.
+     * Figúrka: čierna dáma.
+     */
     private void newQueenBlack()
     {
         ImageView imageView = new ImageView("sample/images/queen_dark.png");
@@ -758,6 +923,9 @@ public class GuiGameContr implements Initializable
         this.whiteFiguresImages.add(imageView);
     }
 
+    /**
+     * Zakazuje prevádzať grafické akcie na danej šachovej partii.
+     */
     private void setGameDisable()
     {
         this.board.setDisable(true);
@@ -772,6 +940,11 @@ public class GuiGameContr implements Initializable
         this.text.setDisable(true);
     }
 
+    /**
+     * Vracia x-ovu pozíciu políčka z x-ovej súradnice na šachovnici.
+     * @param position
+     * @return
+     */
     private int getGuiFieldOnClickX(double position)
     {
         if(position>=35 && position<=110)
@@ -812,6 +985,11 @@ public class GuiGameContr implements Initializable
         }
     }
 
+    /**
+     * Vracia y-ovu pozíciu políčka z y-ovej súradnice na šachovnici.
+     * @param position
+     * @return
+     */
     private int getGuiFieldOnClickY(double position)
     {
         if(position>=35 && position<=110)
@@ -852,6 +1030,11 @@ public class GuiGameContr implements Initializable
         }
     }
 
+    /**
+     * Vracia x-ovu súradnicu na šachovnici z x-ovej pozície políčka. Používa sa pre presun obrázkov(figúrok).
+     * @param field
+     * @return
+     */
     private double getGuiPositionOfImageX(int field)
     {
         if(field == 1)
@@ -892,6 +1075,11 @@ public class GuiGameContr implements Initializable
         }
     }
 
+    /**
+     * Vracia y-ovu súradnicu na šachovnici z y-ovej pozície políčka. Používa sa pre presun obrázkov(figúrok).
+     * @param field
+     * @return
+     */
     private double getGuiPositionOfImageY(int field)
     {
         if(field == 8)
@@ -932,6 +1120,11 @@ public class GuiGameContr implements Initializable
         }
     }
 
+    /**
+     * Vracia x-ovu pozíciu políčka z x-ovej súradnice pozície obrázka (figúrky).
+     * @param position
+     * @return
+     */
     private int getGuiFieldOfImageX(double position)
     {
         if(position == 32)
@@ -972,6 +1165,11 @@ public class GuiGameContr implements Initializable
         }
     }
 
+    /**
+     * Vracia y-ovu pozíciu políčka z y-ovej súradnice pozície obrázka (figúrky).
+     * @param position
+     * @return
+     */
     private int getGuiFieldOfImageY(double position)
     {
         if(position == 32)
@@ -1013,6 +1211,10 @@ public class GuiGameContr implements Initializable
     }
 
 
+    /**
+     * Vytvrára pole obrázkov (bielych figúrok).
+     * @return
+     */
     private ImageView[] createWhiteFigureImagesArray()
     {
         ImageView[] whiteFigures = new ImageView[16];
@@ -1036,6 +1238,10 @@ public class GuiGameContr implements Initializable
 
     }
 
+    /**
+     * Vytvrára pole obrázkov (čiernych figúrok).
+     * @return
+     */
     private ImageView[] createBlackFigureImagesArray()
     {
         ImageView[] blackFigures = new ImageView[16];
@@ -1059,6 +1265,11 @@ public class GuiGameContr implements Initializable
     }
 
 
+    /**
+     * Vytvorí ArrayList obrázkov z poľa.
+     * @param array
+     * @return
+     */
     private List<ImageView> getListFromArray(ImageView[] array)
     {
         List<ImageView> list = new ArrayList<ImageView>();

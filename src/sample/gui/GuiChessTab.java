@@ -7,9 +7,17 @@ import javafx.scene.control.Tab;
 
 import java.io.IOException;
 
+/**
+ * Objekt jedného tabu jednej šachovej partie.
+ */
 public class GuiChessTab
 {
     private Tab tab;
+
+    /**
+     * Vytvorí tab s novou šachovou partiou.
+     * @param gameNumber
+     */
     public GuiChessTab(int gameNumber)
     {
         try {
@@ -24,6 +32,10 @@ public class GuiChessTab
         }
     }
 
+    /**
+     * Vracia tab objektu.
+     * @return
+     */
     public Tab getTab()
     {
         return this.tab;

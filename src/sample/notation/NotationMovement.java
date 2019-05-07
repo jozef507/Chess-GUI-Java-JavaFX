@@ -9,6 +9,10 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Trieda reprezentujúca jeden ťah a hlavne jeho informácii získanych z notácie šachovej partie.
+ * Pri vlastných ťahoch užívateľa sa vytvarajú nové ťahy notácie.
+ */
 public class NotationMovement
 {
     private boolean isLongNotation;
@@ -24,6 +28,9 @@ public class NotationMovement
     private boolean isChess;
     private boolean isChessMat;
 
+    /**
+     * Inicializuje ťah notácie.
+     */
     public NotationMovement()
     {
         this.startFieldCol = -1;
@@ -34,6 +41,12 @@ public class NotationMovement
         this.changingFigureID = -1;
     }
 
+    /**
+     * Nastaví ťah notácie z uživateľoveho ťahu. Je to dôležite pre budúce volanie ťahov spať.
+     * @param isLongNotation Informacia či ide o krátku/dlhú formu zápisu.
+     * @param figuresManager Manažer aktivných/pasívnych figúrok.
+     * @param movementManager Manažer realneo ťahu.
+     */
     public void setNotationMovementFromUserMov(boolean isLongNotation, FiguresManager figuresManager, MovementManager movementManager)
     {
         this.isLongNotation = isLongNotation;
@@ -53,7 +66,11 @@ public class NotationMovement
 
     }
 
-
+    /**
+     * Nastavuje ťah notácie zo zápisu z notácie.
+     * @param s Reťazec zápisu ťahu.
+     * @return Úspešnosť operácie.
+     */
     public boolean setNotationMovementFromString(String s)
     {
         if(s.matches("[KDVSJ]?[abcdefgh][12345678][x]?[abcdefgh][12345678][VDSJ]?[+#]?"))
@@ -265,6 +282,11 @@ public class NotationMovement
         return true;
     }
 
+    /**
+     * Pomocná funkcia pre konvertovanie značky figúrky do id figúrky.
+     * @param s String značky figúrky.
+     * @return ID figúrky.
+     */
     private int getFigureID(String s)
     {
         if (s==null)
@@ -286,6 +308,11 @@ public class NotationMovement
              return -1;
     }
 
+    /**
+     * Pomocná funkcia pre konvertovanie id figúrky do značky danej figúrky.
+     * @param id Id figúrky.
+     * @return Reťazec značky figúrky.
+     */
     private String getStrFigureID(int id)
     {
         if (id==0)
@@ -304,6 +331,11 @@ public class NotationMovement
             return null;
     }
 
+    /**
+     * Pomocná funkcia pre konvertovanie značky stlpca na šachovnici do číselneho poradia stlpca.
+     * @param s String označenia stlpca.
+     * @return Číselné poradie stlpca.
+     */
     private int getIntFieldColumn(String s)
     {
         if (s==null)
@@ -329,6 +361,11 @@ public class NotationMovement
             return -1;
     }
 
+    /**
+     * Pomocna funkcia pre konvertovanie čiselneho poradia stĺpca do značky strlpca.
+     * @param i Číselné poradie stlpca.
+     * @return String označenia stlpca.
+     */
     private String  getStrFieldColumn(int i)
     {
         if (i==1)
@@ -351,8 +388,19 @@ public class NotationMovement
             return null;
     }
 
+    /**
+     * Vracia infomáciu o tom či ide o dlhý zápis ťahu v notácii.
+     * @return Pravdivostna hodnota.
+     */
     public boolean getIsLongNotation() {return this.isLongNotation;}
 
+    /**
+     * Vygeneruje string/zapis ťahu z tohto ťahu notácie.
+     * @param activeFigures Aktívne figúrky na šachovnici - štruktúra.
+     * @param movementFigure Posúvacia figúrka.
+     * @param startFieldOfMovementFig Štartovacie políčko ťahu.
+     * @return Vygenerovaný string.
+     */
     public String getGeneratedStrOfNotMov(List<Figure> activeFigures, Figure movementFigure, Field startFieldOfMovementFig)
     {
         String s = "";
@@ -411,42 +459,82 @@ public class NotationMovement
         return s;
     }
 
+    /**
+     * Vracia stlpec štartovaciaho políčka.
+     * @return
+     */
     public int getStartFieldCol() {
         return startFieldCol;
     }
 
+    /**
+     * Vracia riadok štartovaciaho políčka.
+     * @return
+     */
     public int getStartFieldRow() {
         return startFieldRow;
     }
 
+    /**
+     * Vracia stlpec cieľoveho políčka.
+     * @return
+     */
     public int getGoalFieldCol() {
         return goalFieldCol;
     }
 
+    /**
+     * Vracia riadok cieľoveho políčka.
+     * @return
+     */
     public int getGoalFieldRow() {
         return goalFieldRow;
     }
 
+    /**
+     * Vracia ID figúrky kotorá je pri ťahu posúvaná.
+     * @return ID figúrky.
+     */
     public int getMovementFigureID() {
         return movementFigureID;
     }
 
+    /**
+     * Vracia ID figúrky kotorá je zamenená za pešiaka.
+     * @return ID figúrky.
+     */
     public int getChangingFigureID() {
         return changingFigureID;
     }
 
+    /**
+     * Vracia ID figúrky kotorá je vyhodená.
+     * @return ID figúrky.
+     */
     public boolean getIsFigureRemoving(){
         return this.isFigureRemoving;
     }
 
+    /**
+     * Vráti informáciu o tom či je v tomto ťahu šach.
+     * @return Pravdivostna hodnota.
+     */
     public boolean getIsChess(){
         return this.isChess;
     }
 
+    /**
+     * Vráti informáciu o tom či je v tomto ťahu šachmat.
+     * @return Pravdivostna hodnota.
+     */
     public boolean getIsChessMat(){
         return this.isChessMat;
     }
 
+    /**
+     * Zkompletuje ťah notácie z ťahu užívateľa.
+     * @param movementManager Manážer realneho ťahu.
+     */
     public void completeNotationMovement(MovementManager movementManager)
     {
         if(this.startFieldCol == -1)

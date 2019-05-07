@@ -6,6 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+/**
+ * Trieda reprezentujúca figúrku pešiaka.
+ * Implementuje rozhranie Figure.
+ */
 public class Pawn implements Figure
 {
     private int ID;
@@ -17,6 +21,11 @@ public class Pawn implements Figure
     private List<Field> fieldsInDanger;
 
 
+    /**
+     * Inicializacia pešiaka.
+     * @param isWhite Informacia o farbe.
+     * @param image Obrázok figúrky používaný v grafickom rozhraní.
+     */
     public Pawn(boolean isWhite, ImageView image)
     {
         this.ID = 5;
@@ -29,11 +38,19 @@ public class Pawn implements Figure
 
     }
 
+    /**
+     * Vracia odkaz na obrázok figúrky používajucí v grafickom rozhraní.
+     * @return Odkaz na obrázok.
+     */
     public ImageView getImage()
     {
         return this.image;
     }
 
+    /**
+     * Vracia informáciu o tom či je figúrka biela. Ak nie je čierna.
+     * @return Pravdivostna hodnota.
+     */
     public boolean isWhite()
     {
         return this.isPawnWhite;
@@ -49,21 +66,38 @@ public class Pawn implements Figure
         return super.equals(obj);
     }
 
+    /**
+     * Nastaví aktuálnu pozíciu figúrky.
+     * @param field Políčko pozície na ktorú sa má figurka nastaviť.
+     */
     public void setActualPosition(Field field)
     {
         this.actField = field;
     }
 
+    /**
+     * Vynulovanie/zrušenie aktualnej pozície figúrky.
+     */
     public void nulActualPosition()
     {
         this.actField = null;
     }
 
+    /**
+     * Vráti pozíciu aktualnej pozície figúrky.
+     * @return Odkaz na políčko.
+     */
     public Field getActField()
     {
         return this.actField;
     }
 
+    /**
+     * Vykonáva ťah figúrky a zároveń testuje či je ťah možný.
+     * @param moveTo Cieľove políčko ťahu.
+     * @param figuresManager Manažer aktívnych figúrok.
+     * @return Stav úspešnosti ťahu.
+     */
     public int move(Field moveTo, FiguresManager figuresManager)
     {
         if(this.actField == null)
@@ -117,6 +151,15 @@ public class Pawn implements Figure
         return flag;
     }
 
+    /**
+     * Testuje či je ťah na cieľove políčko možný.
+     * @param actCol Stlpec aktuálneho polička.
+     * @param actRow Riadok aktualneho políčka.
+     * @param moveTo Cieľové políčko.
+     * @param movetoCol Stlpec aktuálneho polička.
+     * @param movetoRow Riadok aktualneho políčka.
+     * @return Pravdivostná hodnota.
+     */
     private boolean isMovementPossible(int actCol, int actRow, Field moveTo, int movetoCol, int movetoRow)
     {
         int colDiff = Math.abs(movetoCol-actCol);
@@ -208,7 +251,9 @@ public class Pawn implements Figure
         return true;
     }
 
-
+    /**
+     * Nastaví pre figúrku všetky políčka ktoré táto figúrka ohrozuej.
+     */
     public void setFieldsInDanger()
     {
         this.fieldsInDanger.clear();
@@ -234,14 +279,26 @@ public class Pawn implements Figure
 
     }
 
-
+    /**
+     * Vracia štruktúru políčok ktoré figúrka ohrozuje.
+     * @return Štruktúra políčok.
+     */
     public List<Field> getFieldsInDanger()
     {
         return this.fieldsInDanger;
     }
 
+    /**
+     * Vracia id figúrky.
+     * @return ID figúrky.
+     */
     public int getID() {return this.ID;}
 
+    /**
+     * Vráti štruktúru všetkych políčok smerujúcich k danému fieldu v parametri.
+     * @param field Odkaz na field.
+     * @return Štruktúra políčok.
+     */
     public List<Field> getFieldsOfDirectionToField(Field field)
     {
         if(!this.fieldsInDanger.contains(field))
@@ -268,6 +325,10 @@ public class Pawn implements Figure
         return false;
     }
 
+    /**
+     * Vracia štruktúru všetkých políčok ktorými môže ohrozovať súperoveho kráľa.
+     * @return Štruktúra políčok.
+     */
     public List<Field> getFieldsForPossMov() {
         List<Field> tmp = new ArrayList<Field>();
         if (this.isWhite()) {
@@ -327,6 +388,10 @@ public class Pawn implements Figure
         return tmp;
     }
 
+    /**
+     * Vracia štruktúru všetkých políčok ktorými môže figúrka vytvárať šachmat.
+     * @return Štruktúra políčok.
+     */
     public  List<Field> getFieldsInDangerChesMat()
     {
         return this.fieldsInDanger;

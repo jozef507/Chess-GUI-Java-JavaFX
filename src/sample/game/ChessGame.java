@@ -9,13 +9,24 @@ import sample.gui.GuiGameFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChessGame implements Game {
+/**
+ * Trieda reprezentujúca celé jadro/logiku jedenej hry.
+ * Obsahuje inštancie tried potrebných pre správu celej hry: board, movementManager,
+ * figuresManager, notation.
+ */
+public class ChessGame implements Game
+{
     private Board board;
     private MovementManager movementManager;
     private FiguresManager figuresManager;
     private Notation notation;
 
 
+    /**
+     * Inicializuje partiu hry.
+     * @param whiteFigureImages Pole odkzaov na obrázky bielých figúrok.
+     * @param blackFigureImages Pole odkzaov na obrázky čiernych figúrok.
+     */
     public ChessGame(ImageView[] whiteFigureImages, ImageView[] blackFigureImages) {
         this.board = new Board(8);
         this.movementManager = new MovementManager();
@@ -60,6 +71,13 @@ public class ChessGame implements Game {
         this.figuresManager.setBlackFieldsInDanger();
     }
 
+    /**
+     * Vytvorí novú figúrku - pešiaka, vloží ho na šachovnicu a pridá do aktívnych figúrok.
+     * @param col Stlpec políčka kam sa má figúrka vložiť.
+     * @param row Riadok políčka kam sa má figúrka vložiť.
+     * @param isPawnWhite Informácia o farbe figúrky.
+     * @param image Odkaz na obrázok figúrky z grafického rozhrania.
+     */
     private void putPawnOnBoard(int col, int row, boolean isPawnWhite, ImageView image) {
         Field field = this.board.getField(col, row);
         if (field.isEmpty()) {
@@ -69,6 +87,13 @@ public class ChessGame implements Game {
         }
     }
 
+    /**
+     * Vytvorí novú figúrku - pešiaka, vloží ho na šachovnicu a pridá do aktívnych figúrok.
+     * @param col Stlpec políčka kam sa má figúrka vložiť.
+     * @param row Riadok políčka kam sa má figúrka vložiť.
+     * @param isRookWhite Informácia o farbe figúrky.
+     * @param image Odkaz na obrázok figúrky z grafického rozhrania.
+     */
     private void putRookOnBoard(int col, int row, boolean isRookWhite, ImageView image) {
         Field field = this.board.getField(col, row);
         if (field.isEmpty()) {
@@ -78,6 +103,13 @@ public class ChessGame implements Game {
         }
     }
 
+    /**
+     * Vytvorí novú figúrku - pešiaka, vloží ho na šachovnicu a pridá do aktívnych figúrok.
+     * @param col Stlpec políčka kam sa má figúrka vložiť.
+     * @param row Riadok políčka kam sa má figúrka vložiť.
+     * @param isRookWhite Informácia o farbe figúrky.
+     * @param image Odkaz na obrázok figúrky z grafického rozhrania.
+     */
     private void putKnightOnBoard(int col, int row, boolean isRookWhite, ImageView image) {
         Field field = this.board.getField(col, row);
         if (field.isEmpty()) {
@@ -87,6 +119,13 @@ public class ChessGame implements Game {
         }
     }
 
+    /**
+     * Vytvorí novú figúrku - pešiaka, vloží ho na šachovnicu a pridá do aktívnych figúrok.
+     * @param col Stlpec políčka kam sa má figúrka vložiť.
+     * @param row Riadok políčka kam sa má figúrka vložiť.
+     * @param isRookWhite Informácia o farbe figúrky.
+     * @param image Odkaz na obrázok figúrky z grafického rozhrania.
+     */
     private void putBishopOnBoard(int col, int row, boolean isRookWhite, ImageView image) {
         Field field = this.board.getField(col, row);
         if (field.isEmpty()) {
@@ -96,6 +135,13 @@ public class ChessGame implements Game {
         }
     }
 
+    /**
+     * Vytvorí novú figúrku - pešiaka, vloží ho na šachovnicu a pridá do aktívnych figúrok.
+     * @param col Stlpec políčka kam sa má figúrka vložiť.
+     * @param row Riadok políčka kam sa má figúrka vložiť.
+     * @param isRookWhite Informácia o farbe figúrky.
+     * @param image Odkaz na obrázok figúrky z grafického rozhrania.
+     */
     private void putQueenOnBoard(int col, int row, boolean isRookWhite, ImageView image) {
         Field field = this.board.getField(col, row);
         if (field.isEmpty()) {
@@ -104,6 +150,14 @@ public class ChessGame implements Game {
             this.figuresManager.addActiveFigure(queen);
         }
     }
+
+    /**
+     * Vytvorí novú figúrku - pešiaka, vloží ho na šachovnicu a pridá do aktívnych figúrok.
+     * @param col Stlpec políčka kam sa má figúrka vložiť.
+     * @param row Riadok políčka kam sa má figúrka vložiť.
+     * @param isRookWhite Informácia o farbe figúrky.
+     * @param image Odkaz na obrázok figúrky z grafického rozhrania.
+     */
     private void putKingOnBoard(int col, int row, boolean isRookWhite, ImageView image) {
         Field field = this.board.getField(col, row);
         if (field.isEmpty()) {
@@ -114,20 +168,54 @@ public class ChessGame implements Game {
         }
     }
 
+    /**
+     * Vracia cieľové políčko momentálne nastaveného ťahu.
+     * @return Objekt políčka.
+     */
     public Field getGoalField() { return this.movementManager.getGoalField(); }
 
+    /**
+     * Mení v jadre programu hráča, ktorý je na ťahu.
+     */
     public void changePlayer() { this.movementManager.changePlayer(); }
 
+    /**
+     * Nastaví informáciu o tom či môže užívateľ vykonávať vlastné ťahy.
+     * @param canPlayerPlay Hodnota informácie.
+     */
     public void setCanPlayerPlay(boolean canPlayerPlay) { this.movementManager.setCanPlayerPlay(canPlayerPlay); }
 
+    /**
+     * Vynuluje informacie o ťahu v logike ktorý je reprezentovaný triedy MovementManager,
+     * a tým pripraví jadro(logiku) na ďalší ťah.
+     */
     public void nullMovementManager() { this.movementManager.nullMovementManager(); }
 
+    /**
+     * Nastavuje informácie o najbližšom ťahu hráča, ktorý sa má vykonať.
+     * @param col Stĺpec políčka ktoré sa má do ťahu nastaviť.
+     * @param row Riadok políčka ktoré sa má do ťahu nastaviť.
+     * @return Úspešnosť metódy.
+     */
     public boolean setPlayerMovement(int col, int row) { return this.movementManager.setPlayerMovement(col, row, this.board); }
 
+    /**
+     * Nastavuje informácie o najbližšom prehrávanom ťahu, ktorý sa má vykonať. Tieto informácie
+     * sa vyberú z notácie partie.
+     * @return Úspešnosť metódy.
+     */
     public boolean setPlaybackMovement(){return this.movementManager.setPlaybackMovement(this.board, this.notation, this.figuresManager);}
 
+    /**
+     * Vykonáva už nastavený ťah hráča v jadre programu.
+     * @return Úspešnosť ťahu.
+     */
     public boolean performPlayerMovement() {return this.movementManager.performMovement(this.figuresManager);}
 
+    /**
+     * Vykonáva už nastavený prehrávaný ťah v jadre programu.
+     * @return Úspešnosť ťahu.
+     */
     public boolean performPlaybackMovement()
     {
         boolean flag = this.movementManager.performMovement(this.figuresManager);
@@ -155,30 +243,84 @@ public class ChessGame implements Game {
         return true;
     }
 
+    /**
+     * Nastaví momentálny ťah v jadre programu a testuje správnosť/povolenosť ťahu.
+     * @return Úspešnosť testu.
+     */
     public boolean setPlaybackUndoMovement(){return this.movementManager.setPlaybackUndoMovement(this.notation.getPrevNotationMovement(), this.board, this.figuresManager);}
 
+    /**
+     * Vykonáva momentálne nastavený ťah v jadre programu a testuje správnosť/povolenosť ťahu.
+     * @return Úspešnosť testu.
+     */
     public boolean performPlaybackUndoMovement(){return this.movementManager.performPlaybackUndoMovement(this.notation.getPrevNotationMovement(), this.figuresManager);}
 
+    /**
+     * @return Informáciu o tom či je na ťahu biely hráč.
+     */
     public boolean isWhiteOnTheMove() {return this.movementManager.isWhiteOnTheMove(); }
 
+    /**
+     * Vracia obrazok figúrky, ktorá sa v danom ťahu posúva.
+     * @return Odkaz na daný obrázok.
+     */
     public ImageView getImageOfMovFigure() { return this.movementManager.getMovementFigure().getImage();}
 
+    /**
+     * Vracia obrazok figúrky, ktorá sa na začiatku ťahu nachádza na cieľovom políčku (vyhadzovaná figúrka).
+     * @return Odkaz na daný obrázok.
+     */
     public ImageView getImageOfGoalFieldFigure() { return this.movementManager.getGoalFieldFigure().getImage();}
 
+    /**
+     * Vracia notáciu šachovej partie, ktorá je uložena v Stringovom ArraListe po riadku.
+     * @return ArrayList notácie.
+     */
     public List<String> getGameNotation(){ return this.notation.getGameNotationLines(); }
 
+    /**
+     * Vracia riadok poradie riadku notácie, ktorý má byť vyznačený.
+     * @return Poradie riadku.
+     */
     public int getIndexOfGameNotation(){return this.notation.getIndexProcNotMov();}
 
+    /**
+     * Vracia informáciu o tom či je momentálne ťah kompletne nastavený. (Je nastavené
+     * štartovacie aj cieľové políčko.)
+     * @return Uspešnosť testu.
+     */
     public boolean isMovementCompletlySet() {return this.movementManager.isMovementCompletlySet();}
 
+    /**
+     * Testuje to či sa v momentalne nastaveném ťahu nachádza vyhadzovanie figurky.
+     * @return Úspešnosť testu.
+     */
     public boolean isRemovingFigure() {return this.movementManager.getIsRemovingFigure();}
 
+    /**
+     * Vracia informáciu o tom či v momentálnom ťahu nastal šach.
+     * @return Hodnota informácie.
+     */
     public boolean getChess() {return this.figuresManager.getChess();}
 
+    /**
+     * Vracia informáciu o tom či v momentálnom ťahu nastal šachmat.
+     * @return Hodnota informácie.
+     */
     public boolean getChessMat() {return this.figuresManager.getChessMat();}
 
+    /**
+     * Testuje to či sa v momentalne nastaveném ťahu nachádza výmena pešiaka za novú figúrku.
+     * @return Úspešnosť testu.
+     */
     public boolean getIsChangingFigure () { return this.movementManager.getIsChangingFigure();}
 
+    /**
+     * Vytvára v jadre programu novú figúrku a položí ju na šachovnicu.
+     * @param image Obrázok novej figúrky, ktorý sa uloži ako premenna objektu novej figúrky.
+     * @param id Identifikátor typu figúrky, ktorá sa má vytvoriť.
+     * @return Úspešnosť vytvorenia.
+     */
     public boolean createNewFigure(ImageView image, int id)
     {
         switch (id)
@@ -212,6 +354,9 @@ public class ChessGame implements Game {
         }
     }
 
+    /**
+     * Zamení pešiaka za náhradnú figúrku.
+     */
     private void setChangedFigureField()
     {
         Field field = this.movementManager.getGoalField();
@@ -220,33 +365,71 @@ public class ChessGame implements Game {
         this.figuresManager.addChangedFigure(changedFigure);
     }
 
+    /**
+     * V prípade vlastného ťahu užívateľa pridá nový ťah do notácie partie.
+     * Informácie sa získavajú z aktuálne nastaveného ťahu.
+     */
     public void addPlayerNotationMovement(){this.notation.addPlayerNotationMovement(this.figuresManager, this.movementManager);}
 
+    /**
+     * Ukladá notáciu do súboru.
+     * @return Úspešnosť uloženia.
+     */
     public boolean saveNotation() {return this.notation.saveNotation();}
 
+    /**
+     * Vráti hodnotu identifikátoru figúrky ktorá nahradila pešiaka.
+     * @return ID figúrky.
+     */
     public int getChangingFigureID(){return this.notation.getChangingFigureID();}
 
+    /**
+     * Inkrementuje index notácie pre výber aktuálneho ťahu.
+     */
     public void incrementIndexOfNotationLines()
     {
         this.notation.incrementIndexOfNotationLines();
     }
 
+    /**
+     * Dekrementuje index notácie pre výber aktuálneho ťahu.
+     */
     public void decrementIndexOfNotationLines(){this.notation.decrementIndexOfNotationLines();}
 
+    /**
+     * Testovanie či je index ťahov notácie na začiatku (je nulový).
+     * @return Úspešnosť testu.
+     */
     public boolean isFirstIndexOfNotation() {return this.notation.isFirstIndex();}
 
+    /**
+     * Testovanie či je index ťahov notácie na konci (je posledný).
+     * @return Úspešnosť testu.
+     */
     public boolean isLastIndexOfNotation()
     {
         return this.notation.isLastIndex();
     }
 
+    /**
+     * Skompletuje informácie o ťahu notácie ak nie sú kompletné.
+     * Využívané pri krátkej forme zápisu notácie.
+     */
     public void completeNotationMovement()
     {
         this.notation.completeNotationMovement(this.movementManager);
     }
 
+    /**
+     * Vracia momentálne nastavený ťah partie.
+     * @return Objekt ťahu.
+     */
     public MovementManager getMovementManager(){return this.movementManager;}
 
+    /**
+     * Vracia informáciu o tom či zápis notácie partie správny.
+     * @return Úspešnosť testu.
+     */
     public boolean isNotationRight(){return this.notation.getIsRight();}
 
 

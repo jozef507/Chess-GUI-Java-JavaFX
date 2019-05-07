@@ -1,6 +1,10 @@
 package sample.board;
 import sample.figures.Figure;
 
+/**
+ * Trieda reprezentujúca jedno políčko na šachovníci.
+ * Implementuje rozhranie Field.
+ */
 public class BoardField implements Field
 {
     private int row;
@@ -8,6 +12,11 @@ public class BoardField implements Field
     private Field[] nextFields;
     private Figure figure;
 
+    /**
+     * Inicializuje políčko.
+     * @param col Stlpec políčka na šachovnici.
+     * @param row Riadok políčka na šachovnici.
+     */
     public BoardField(int col, int row)
     {
         this.col = col;
@@ -16,28 +25,49 @@ public class BoardField implements Field
         this.figure = null;
     }
 
+    /**
+     * Vráti pozíciu stlpca na šachovnici tohto políčka.
+     * @return Hodnotu slpca.
+     */
     public int getColPos()
     {
         return this.col;
     }
 
+    /**
+     * Vráti pozíciu riadka na šachovnici tohto políčka.
+     * @return Hodnotu riadka.
+     */
     public int getRowPos()
     {
         return this.row;
     }
 
+    /**
+     * Pridáva políčku susedné políčko v smere na šachovnici.
+     * @param dirs Smer na šachovnici.
+     * @param field Plíčko ktoré prídá ako susedné.
+     */
     public void addNextField(Direction dirs, Field field)
     {
         nextFields[dirs.ordinal()] = field;
     }
 
+    /**
+     * Vracia susedné políčko tohto políčka v danom smere.
+     * @param dirs Smer na šachovnici.
+     * @return Odkaz na políčko.
+     */
     public Field nextField(Direction dirs)
     {
         Field tmp = nextFields[dirs.ordinal()];
         return tmp;
     }
 
-
+    /**
+     * Testovanie či je dané políčko prázdne.
+     * @return Úspešnosť testu.
+     */
     public boolean isEmpty()
     {
         if(this.figure == null)
@@ -46,6 +76,10 @@ public class BoardField implements Field
             return false;
     }
 
+    /**
+     * Vráti figúrku ležiacu na danom políčku.
+     * @return Odkaz na figúrku.
+     */
     public Figure get()
     {
         Figure figure = this.figure;
@@ -59,6 +93,11 @@ public class BoardField implements Field
         }
     }
 
+    /**
+     * Vloží danú figúrku na toto políčko a testuje úspešnosť tohto úkonu.
+     * @param figure Figúrka ktorá má byť vložená na políčko.
+     * @return Úspešnosť testu.
+     */
     public boolean put(Figure figure)
     {
         if(isEmpty())
@@ -73,6 +112,11 @@ public class BoardField implements Field
         }
     }
 
+    /**
+     * Odstráni danú figúrku z tohto políčka a testuje úspešnosť tohto úkonu.
+     * @param figure Figúrka ktorá má byť odstránená z políčka.
+     * @return Úspešnosť testu.
+     */
     public boolean remove(Figure figure)
     {
         if(isEmpty())

@@ -1,9 +1,17 @@
 package sample.board;
 
+/**
+ * Trieda reprezentujúca šachovnicu. Šachovnica je reprezentovaná
+ * dvojrozmerným poľom inštancii triedy/rozhrania Field.
+ */
 public class Board
 {
     private BoardField[][] board;
 
+    /**
+     * Inicializuje šachovnicu.
+     * @param size Počet riadov/stlpcov poličok šachovnice.
+     */
     public Board(int size)
     {
         board = new BoardField[size][size];
@@ -23,13 +31,17 @@ public class Board
                 Field tmp;
                 for (Field.Direction dirs : Field.myValues())
                 {
-                    tmp = chooseNextField(dirs, i, j, board, size);
+                    tmp = chooseNextField(dirs, i, j, size);
                     board[i][j].addNextField(dirs, tmp);
                 }
             }
         }
     }
 
+    /**
+     * Vracia veľkosť šachovnice.
+     * @return Veľkosť šachovnice.
+     */
     public int getSize ()
     {
         int rows = board.length;
@@ -45,13 +57,27 @@ public class Board
         }
     }
 
+    /**
+     * Vracia odkaz na poličko (Field) na základe jeho pozície.
+     * @param col Stlpec pozície políčka.
+     * @param row Riadok pozície políčka.
+     * @return Odkaz na políčko(Field).
+     */
     public Field getField(int col, int row)
     {
         Field field = board[col-1][row-1];
         return field;
     }
 
-    public Field chooseNextField(Field.Direction dirs, int col, int row, BoardField[][] board, int size)
+    /**
+     * Vracia odkaz na susedné políčko políčka určeného jeho pozíciou.
+     * @param dirs Smer susedného políčka.
+     * @param col Stlpec pozície aktuálneho políčka.
+     * @param row Riadok pozície aktuálneho políčka.
+     * @param size Veľkosť šachovnice.
+     * @return Odkaz na susedné políčko (Field).
+     */
+    public Field chooseNextField(Field.Direction dirs, int col, int row, int size)
     {
         int nextCol, nextRow;
         Field tmp;
@@ -72,6 +98,11 @@ public class Board
         return tmp;
     }
 
+    /**
+     * Vráti susedný stlpec na šachovnici.
+     * @param dirs Smer na šachovnici.
+     * @return Celočíselnu hodnotu o úspechu.
+     */
     public int getNextCol (Field.Direction dirs)
     {
         int newCol;
@@ -108,6 +139,11 @@ public class Board
         return newCol;
     }
 
+    /**
+     * Vráti susedný riadok na šachovnici.
+     * @param dirs Smer na šachovnici.
+     * @return Celočíselnu hodnotu o úspechu.
+     */
     public int getNextRow (Field.Direction dirs)
     {
         int newRow;

@@ -6,6 +6,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Trieda reprezentujúca manažera figúrok. Obsahuje informácie o aktívných figúrkach (na šachovnici)
+ * vyhodených figurkách a takisto zamenených figúrkach.
+ */
 public class FiguresManager
 {
     //private boolean chess;
@@ -23,7 +27,9 @@ public class FiguresManager
     private List<Field> blackFieldsInDanger;
 
 
-
+    /**
+     * Inicializace objektu.
+     */
     public FiguresManager()
     {
         //this.chess = false;
@@ -36,6 +42,15 @@ public class FiguresManager
         this.blackFieldsInDanger = new ArrayList<Field>();
     }
 
+    /**
+     * Základná metoda tejto triedy, volaná po uskutočnení každého ťahu. Jej úlohou je aktualizovať
+     * štruktúry aktívnych/pasívnych figúrok ale najmä aktualizovať štruktúry pre políčka v ohrození požívajuce
+     * sa na detekciu šachu a šachmatu.
+     * @param whiteOnTheMove Informácia o tom ktorý hráč je na ťahu.
+     * @param movingFigure Odkaz na figúrku ktorá sa pri ťahu presúva.
+     * @param removedFigure Odkaz na figúrku ktorý bola vyhodená.
+     * @return Úspešnosť operácie.
+     */
     public boolean updateFigures(boolean whiteOnTheMove, Figure movingFigure, Figure removedFigure)
     {
         List<Figure> tmpActiveWhiteFigures = new ArrayList<>(this.activeWhiteFigures);
@@ -89,6 +104,10 @@ public class FiguresManager
 
     }
 
+    /**
+     * Pridá figúrku figure do štruktúry aktívnych figúrok podľa jej farby.
+     * @param figure
+     */
     public void addActiveFigure(Figure figure)
     {
         if (figure.isWhite())
@@ -97,6 +116,10 @@ public class FiguresManager
             this.activeBlackFigures.add(figure);
     }
 
+    /**
+     * Pridá vyhodenú figúrku figure do štruktúry pre vyhodené figúrky.
+     * @param figure
+     */
     public void addRemovedFigure(Figure figure)
     {
         if (figure.isWhite())
@@ -117,6 +140,10 @@ public class FiguresManager
         }
     }
 
+    /**
+     * Pridá zamenenú figúruku(pešiaka) figure do štruktúry pre zamenené figúrky.
+     * @param figure
+     */
     public void addChangedFigure(Figure figure)
     {
         if (figure.isWhite())
@@ -137,6 +164,9 @@ public class FiguresManager
         }
     }
 
+    /**
+     * Nastaví/aktualizuje štruktúru ohrozených políčok bielymi figúrkami.
+     */
     public void setWhiteFieldsInDanger()
     {
         this.whiteFieldsInDanger.clear();
@@ -151,6 +181,9 @@ public class FiguresManager
         }
     }
 
+    /**
+     * Nastaví/aktualizuje štruktúru ohrozených políčok čiernymi figúrkami.
+     */
     public void setBlackFieldsInDanger()
     {
         this.blackFieldsInDanger.clear();
@@ -165,6 +198,10 @@ public class FiguresManager
         }
     }
 
+    /**
+     * Nastaví/aktualizuje štruktúru ohrozených políčok bielymi figúrkami okrem bieleho kráľa.
+     * @return
+     */
     public List<Field> getWhiteFieldsInDangerWithoutKing()
     {
         List<Field> whiteFieldsInDangerWithoutKing = new ArrayList<Field>();
@@ -184,6 +221,10 @@ public class FiguresManager
         return whiteFieldsInDangerWithoutKing;
     }
 
+    /**
+     * Nastaví/aktualizuje štruktúru ohrozených políčok čiernymi figúrkami okrem čierneho kráľa.
+     * @return
+     */
     public List<Field> getBlackFieldsInDangerWithoutKing()
     {
         List<Field> blackFieldsInDangerWithoutKing = new ArrayList<Field>();
@@ -204,6 +245,12 @@ public class FiguresManager
         return blackFieldsInDangerWithoutKing;
     }
 
+    /**
+     * Metóda kontroluje či je prítomny na šachovnici šach.
+     * @param isWhiteOnTheMove Hrač na ťahu.
+     * @param movingFigure Presúvaná figúrka.
+     * @return Výsledok kontroly.
+     */
     public boolean checkChess(boolean isWhiteOnTheMove, Figure movingFigure)
     {
         Field kingFieldBlack = this.blackKing.getActField();
@@ -235,6 +282,11 @@ public class FiguresManager
         return false;
     }
 
+    /**
+     * Metóda kontroluje či momentálny stav na šachovnici nespôsobuje šach mat.
+     * @param isWhiteOnTheMove Hráč na ťahu.
+     * @return Výsledok kotnroly.
+     */
     public boolean checkChessMat(boolean isWhiteOnTheMove)
     {
         if(isWhiteOnTheMove)
@@ -357,6 +409,10 @@ public class FiguresManager
         }
     }
 
+    /**
+     * Nastaví člena/premennu tejto triedy kráľa na kráľa daného parametrom.
+     * @param king Kráľ ktorý má byť priradený objektu.
+     */
     public void setKing(King king)
     {
         if(king.isWhite())
@@ -369,28 +425,62 @@ public class FiguresManager
         }
     }
 
+    /**
+     * Vracia informáciu o tom či je na šachovnici stav - šach.
+     * @return Pravdivostná hodnota.
+     */
     public boolean getChess()
     {
         return this.whiteKing.getInChess() || this.blackKing.getInChess();
     }
 
+    /**
+     * Vracia informáciu o tom či je na šachovnici stav - šachmat.
+     * @return Pravdivostná hodnota.
+     */
     public boolean getChessMat()
     {
         return this.chessMat;
     }
 
+    /**
+     * Vráti poslednú figúrku priradenú do štruktúry - zamenené figúrky.
+     * @return Odkaz na figúrku.
+     */
     public Figure getLastChangedFigure () {return this.changedFigures.get(this.changedFigures.size()-1);}
 
+    /**
+     * Odstráni poseldnú figúrku zo štruktúry - zamenené figúrky.
+     */
     public void removeLastChangedFigure () {this.changedFigures.remove(this.changedFigures.size()-1);}
 
+    /**
+     * Vráti štruktúru aktívnych bielych figúrok.
+     * @return Štruktúru figúrok.
+     */
     public List<Figure> getActiveWhiteFigures () {return this.activeWhiteFigures;}
 
+    /**
+     * Vráti štruktúru aktívnych čiernych figúrok.
+     * @return Štruktúru figúrok.
+     */
     public List<Figure> getActiveBlackFigures () {return this.activeBlackFigures;}
 
+    /**
+     * Vráti poslednú figúrku priradenú do štruktúry - vyhodené figúrky.
+     * @return Odkaz na figúrku.
+     */
     public Figure getLastRemovedFigure()  { return  this.removedFigures.get(this.removedFigures.size()-1); }
 
+    /**
+     * Odstráni poseldnú figúrku zo štruktúry - vyhodené figúrky.
+     */
     public void removeLastRemovedFigure()  { this.removedFigures.remove(this.removedFigures.size()-1); }
 
+    /**
+     * Odstráni z aktívnych figúrok figurkú danú parametrom.
+     * @param figure Odkaz na danú figúrku.
+     */
     public void  removeActiveFigure(Figure figure)
     {
         if(figure.isWhite())
@@ -399,6 +489,10 @@ public class FiguresManager
             this.activeBlackFigures.remove(figure);
     }
 
+    /**
+     * Nastaví člena tiredy šachmat podľa daného parametru.
+     * @param is Pravdivostná hotnota.
+     */
     public void setChessMat(boolean is)
     {
         this.chessMat = is;

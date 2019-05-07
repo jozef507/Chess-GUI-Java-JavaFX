@@ -6,6 +6,10 @@ import sample.board.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Trieda reprezentujúca figúrku kráľa.
+ * Implementuje rozhranie Figure.
+ */
 public class King implements Figure
 {
     private int ID;
@@ -19,6 +23,12 @@ public class King implements Figure
 
     private boolean inChess;
     private Figure chessBy;
+
+    /**
+     * Inicializacia kráľa.
+     * @param isWhite Informacia o farbe.
+     * @param image Obrázok figúrky používaný v grafickom rozhraní.
+     */
     public King(boolean isWhite, ImageView image)
     {
         this.ID = 0;
@@ -31,12 +41,19 @@ public class King implements Figure
     }
 
 
+    /**
+     * Vracia odkaz na obrázok figúrky používajucí v grafickom rozhraní.
+     * @return Odkaz na obrázok.
+     */
     public ImageView getImage()
     {
         return this.image;
     }
 
-
+    /**
+     * Vracia informáciu o tom či je figúrka biela. Ak nie je čierna.
+     * @return Pravdivostna hodnota.
+     */
     public boolean isWhite()
     {
         return this.isKingWhite;
@@ -55,21 +72,38 @@ public class King implements Figure
         return super.equals(obj);
     }
 
+    /**
+     * Nastaví aktuálnu pozíciu figúrky.
+     * @param field Políčko pozície na ktorú sa má figurka nastaviť.
+     */
     public void setActualPosition(Field field)
     {
         this.actField = field;
     }
 
+    /**
+     * Vynulovanie/zrušenie aktualnej pozície figúrky.
+     */
     public void nulActualPosition()
     {
         this.actField = null;
     }
 
+    /**
+     * Vráti pozíciu aktualnej pozície figúrky.
+     * @return Odkaz na políčko.
+     */
     public Field getActField()
     {
         return this.actField;
     }
 
+    /**
+     * Vykonáva ťah figúrky a zároveń testuje či je ťah možný.
+     * @param moveTo Cieľove políčko ťahu.
+     * @param figuresManager Manažer aktívnych figúrok.
+     * @return Stav úspešnosti ťahu.
+     */
     public int move(Field moveTo, FiguresManager figuresManager)
     {
         if(this.actField == null)
@@ -113,6 +147,15 @@ public class King implements Figure
         return flag;
     }
 
+    /**
+     * Testuje či je ťah na cieľove políčko možný.
+     * @param actCol Stlpec aktuálneho polička.
+     * @param actRow Riadok aktualneho políčka.
+     * @param moveTo Cieľové políčko.
+     * @param movetoCol Stlpec aktuálneho polička.
+     * @param movetoRow Riadok aktualneho políčka.
+     * @return Pravdivostná hodnota.
+     */
     private boolean isMovementPossible(int actCol, int actRow, Field moveTo, int movetoCol, int movetoRow)
     {
         int colDiff = Math.abs(movetoCol-actCol);
@@ -136,6 +179,9 @@ public class King implements Figure
         return true;
     }
 
+    /**
+     * Nastaví pre figúrku všetky políčka ktoré táto figúrka ohrozuej.
+     */
     public void setFieldsInDanger()
     {
         this.fieldsInDanger.clear();
@@ -150,6 +196,10 @@ public class King implements Figure
         this.appendFieldsInDanger(Field.Direction.D);
     }
 
+    /**
+     * Pridá polička v danom smere.
+     * @param dir Smer na šachovnici.
+     */
     private void appendFieldsInDanger(Field.Direction dir)
     {
         Field nextField=this.actField.nextField(dir);
@@ -157,11 +207,20 @@ public class King implements Figure
             this.fieldsInDanger.add(nextField);
     }
 
+    /**
+     * Vracia štruktúru políčok ktoré figúrka ohrozuje.
+     * @return Štruktúra políčok.
+     */
     public List<Field> getFieldsInDanger()
     {
         return this.fieldsInDanger;
     }
 
+    /**
+     * Testuje pri šachu či sa tento kráľ môže niekam pohnúť.
+     * @param fieldsInDangerOut Ohrozené políčka.
+     * @return Výsledok testu.
+     */
     public boolean canMove(List<Field> fieldsInDangerOut)
     {
         Field nextField;
@@ -289,27 +348,52 @@ public class King implements Figure
         return false;
     }
 
+    /**
+     * Nastaví informáciu, či je kraľ v šachu.
+     * @param inChess
+     */
     public void setInChess(boolean inChess) {
         this.inChess = inChess;
     }
 
+    /**
+     * Vráti informáciu či je kráľ v šachu.
+     * @return Pravdivostná hodnota.
+     */
     public boolean getInChess()
     {
         return this.inChess;
     }
 
+    /**
+     * Nastaví informáciu že je kráľ v šachu danou figúrkou.
+     * @param figure hodnota.
+     */
     public void setChessBy(Figure figure)
     {
         this.chessBy = figure;
     }
 
+    /**
+     * Vráti figúrku ktorou je tento kraľ v šachu.
+     * @return
+     */
     public Figure getChessBy ()
     {
         return this.chessBy;
     }
 
+    /**
+     * Vracia id figúrky.
+     * @return ID figúrky.
+     */
     public int getID() {return this.ID;}
 
+    /**
+     * Vráti štruktúru všetkych políčok smerujúcich k danému fieldu v parametri.
+     * @param field Odkaz na field.
+     * @return Štruktúra políčok.
+     */
     public List<Field> getFieldsOfDirectionToField(Field field)
     {
         if(!this.fieldsInDanger.contains(field))
@@ -321,11 +405,19 @@ public class King implements Figure
         return fieldsOfDirToField;
     }
 
+    /**
+     * Vracia štruktúru všetkých políčok ktorými môže ohrozovať súperoveho kráľa.
+     * @return Štruktúra políčok.
+     */
     public List<Field> getFieldsForPossMov()
     {
         return this.fieldsInDanger;
     }
 
+    /**
+     * Vracia štruktúru všetkých políčok ktorými môže figúrka vytvárať šachmat.
+     * @return Štruktúra políčok.
+     */
     public  List<Field> getFieldsInDangerChesMat()
     {
         return this.fieldsInDanger;
