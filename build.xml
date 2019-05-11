@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<project name="JavaFX IJA-Project" default="compile" basedir="."
+         xmlns:fx="javafx:com.sun.javafx.tools.ant">
+
+
+    <property name="src.dir" value="src"/>
+    <property name="resources.dir" value="lib/resources"/>
+    <property name="lib.dir" value="lib"/>
+    <property name="build.dir" value="build"/>
+    <property name="dest.dir" value="dest"/>
+    <property name="build.data.dir" value="data"/>
+
+    <target name="compile" depends="clean,pre-compile">
+
+        <exec executable="/bin/bash">
+            <arg value="${lib.dir}/get-libs.sh"/>
+        </exec>
+
+        <taskdef resource="com/sun/javafx/tools/ant/antlib.xml"
+                 uri="javafx:com.sun.javafx.tools.ant"
+                 classpath="lib/resources/ant-javafx.jar"/>
+
+        <fx:application id="ProjectIjaAppID"
+                        name="ProjectIjaApp"
+                        mainClass="sample.Main"/>
+
+
+
+        <fx:resources id="appRes">
+            <fx:fileset dir="${dest.dir}" includes="ija-app.jar"/>
+        </fx:resources>
+
+        <fx:jar destfile="${dest.dir}/ija-app.jar">
+            <fx:application refid="ProjectIjaAppID"/>
+            <fx:resources refid="appRes"/>
+            <fileset dir="${build.dir}"/>
+            <fileset dir="${resources.dir}"/>
+            <fileset dir="${build.data.dir}"/>
+
+            <manifest>
+                <attribute name = "Main-Class" value = "sample.Main"/>
+            </manifest>
+
+        </fx:jar>
+
+
+    </target>
+
+    <target name="clean">
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${dest.dir}"/>
+
+        <delete>
+            <fileset dir="${build.dir}" includes="**/*"/>
+            <fileset dir="${dest.dir}" includes="**/*"/>
+        </delete>
+
+    </target>
+
+    <target name="pre-compile" depends="clean">
+
+        <javadoc packagenames="sample" sourcepath="src/sample" destdir="doc" encoding="UTF-8">
+            <fileset dir="src/sample">
+                <include name="**" />
+            </fileset>
+        </javadoc>
+
+        <javac includeantruntime="false"
+               srcdir="${src.dir}"
+               destdir="${build.dir}"
+               fork="yes"
+               source="8"
+               debug="on"
+               encoding="UTF-8">
+        </javac>
+    </target>
+
+    <target name="run">
+        <taskdef resource="com/sun/javafx/tools/ant/antlib.xml"
+                 uri="javafx:com.sun.javafx.tools.ant"
+                 classpath="lib/resources/ant-javafx.jar"/>
+
+        <fx:application id="ProjectIjaAppID"
+                        name="ProjectIjaApp"
+                        mainClass="sample.Main"/>
+
+        <fx:resources id="appRes">
+            <fx:fileset dir="${dest.dir}" includes="ija-app.jar"/>
+        </fx:resources>
+
+        <fx:jar destfile="${dest.dir}/ija-app.jar">
+            <fx:application refid="ProjectIjaAppID"/>
+            <fx:resources refid="appRes"/>
+            <fileset dir="${build.dir}"/>
+            <fileset dir="${resources.dir}"/>
+            <fileset dir="${build.data.dir}"/>
+
+            <manifest>
+                <attribute name = "Main-Class" value = "sample.Main"/>
+            </manifest>
+
+        </fx:jar>
+
+        <java jar="dest/ija-app.jar" fork="true"></java>
+    </target>
+</project>
