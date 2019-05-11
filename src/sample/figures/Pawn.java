@@ -239,6 +239,7 @@ public class Pawn implements Figure
         return true;
     }
 
+
     private boolean checkDirWithoutRemove(Field.Direction dir, int diff)
     {
         Field nextField=this.actField;

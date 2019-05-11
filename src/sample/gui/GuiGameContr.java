@@ -697,6 +697,11 @@ public class GuiGameContr implements Initializable
             else
             {
                 game.nullMovementManager();
+                if(!game.getIsNotationRight())
+                {
+                    this.setGameDisable();
+                    getInfoDialgo("Notation of current movement is incorrect!");
+                }
             }
         }
     }

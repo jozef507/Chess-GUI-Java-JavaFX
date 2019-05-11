@@ -183,6 +183,8 @@ public interface Game
      */
     boolean isNotationRight();
 
+    boolean getIsNotationRight();
+
 
 
 

@@ -47,6 +47,13 @@ public class MovementManager
         this.changingFigure = null;
     }
 
+
+    /**
+     * Vracia štartovacie políčko ťahu.
+     * @return Odkaz na políčko.
+     */
+    public Field getStartField () { return this.startField;}
+
     /**
      * Vracia štartovacie políčko ťahu.
      * @return Odkaz na štartovacie políčko.
@@ -384,12 +391,6 @@ public class MovementManager
      * @return Pravdivostna informácia.
      */
     public boolean getIsChangingFigure() {return this.isChangingFigure;}
-
-    /**
-     * Vracia štartovacie políčko ťahu.
-     * @return Odkaz na políčko.
-     */
-    public Field getStartField () { return this.startField;}
 
 
 }

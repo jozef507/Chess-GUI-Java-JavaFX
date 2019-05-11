@@ -163,7 +163,7 @@ public class Notation
             this.gameNotationLines.remove(this.gameNotationLines.size()-1);
         }
 
-        if(linesFlag==0 && linesToRemove!=0)
+        if(linesFlag==0 /*&& linesToRemove!=0*/)
         {
             String s = this.gameNotationLines.get(this.gameNotationLines.size()-1);
             this.gameNotationLines.remove(this.gameNotationLines.size()-1);
@@ -173,7 +173,6 @@ public class Notation
             s = ""+lineArray[0]+" "+lineArray[1];
             s.trim();
             this.gameNotationLines.add(s);
-
         }
 
     }
@@ -335,8 +334,13 @@ public class Notation
     /**
      * Nastaví notáciu ako nesprávnu chybovou hláškou.
      */
-    private void setWrongNotation() {
+    private void setWrongNotation(){
         this.gameNotationLines.clear();
         this.gameNotationLines.add("Chess notation is incorrect!");
+    }
+
+    public void setIsRight(boolean is)
+    {
+        this.isRight = is;
     }
 }
