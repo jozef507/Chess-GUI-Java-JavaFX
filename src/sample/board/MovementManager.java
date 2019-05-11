@@ -1,3 +1,10 @@
+/**
+ * Trieda reprezentujúca aktuálny ťah hry.
+ * @author Ján Folenta
+ * @author Jozef Ondria
+ */
+
+
 package sample.board;
 
 import javafx.scene.image.ImageView;

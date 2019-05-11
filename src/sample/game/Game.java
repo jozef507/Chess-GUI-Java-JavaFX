@@ -1,3 +1,9 @@
+/**
+ * Trieda reprezentujúca rozhranie pre jadro(logiku) aplikácie.
+ * @author Ján Folenta
+ * @author Jozef Ondria
+ */
+
 package sample.game;
 import javafx.scene.image.ImageView;
 import sample.board.Field;

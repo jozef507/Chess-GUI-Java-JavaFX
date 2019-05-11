@@ -1,3 +1,9 @@
+/**
+ * Trieda reprezentujúca notáciu jedneho ťahu hry/partie.
+ * @author Ján Folenta
+ * @author Jozef Ondria
+ */
+
 package sample.notation;
 
 import sample.board.Field;

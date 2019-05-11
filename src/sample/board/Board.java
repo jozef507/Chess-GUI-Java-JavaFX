@@ -1,3 +1,9 @@
+/**
+ * Trieda reprezentujúca šachovnicu.
+ * @author Ján Folenta
+ * @author Jozef Ondria
+ */
+
 package sample.board;
 
 /**

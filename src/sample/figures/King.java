@@ -1,3 +1,10 @@
+/**
+ * Trieda reprezentujúca figúrku kráľa.
+ * @author Ján Folenta
+ * @author Jozef Ondria
+ */
+
+
 package sample.figures;
 
 import javafx.scene.image.ImageView;

@@ -1,3 +1,9 @@
+/**
+ * Trieda reprezentujúca hlavnu triedu aplikácie.
+ * @author Ján Folenta
+ * @author Jozef Ondria
+ */
+
 package sample;
 
 import javafx.application.Application;

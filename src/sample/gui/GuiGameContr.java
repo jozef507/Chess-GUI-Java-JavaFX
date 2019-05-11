@@ -1,3 +1,10 @@
+/**
+ * Trieda reprezentujúca controller pre grafický návrh v chessboard.fxml.
+ * @author Ján Folenta
+ * @author Jozef Ondria
+ */
+
+
 package sample.gui;
 
 import javafx.animation.KeyFrame;

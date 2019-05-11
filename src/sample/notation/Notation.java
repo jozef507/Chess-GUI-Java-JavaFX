@@ -1,3 +1,9 @@
+/**
+ * Trieda reprezentujúca notáciu hry/partie.
+ * @author Ján Folenta
+ * @author Jozef Ondria
+ */
+
 package sample.notation;
 
 import sample.board.MovementManager;

@@ -1,3 +1,9 @@
+/**
+ * Trieda reprezentujúca rozhranie pre poličko šachovnice.
+ * @author Ján Folenta
+ * @author Jozef Ondria
+ */
+
 package sample.board;
 import sample.figures.Figure;
 

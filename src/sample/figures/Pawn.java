@@ -1,3 +1,9 @@
+/**
+ * Trieda reprezentujúca figúrku pešiaka.
+ * @author Ján Folenta
+ * @author Jozef Ondria
+ */
+
 package sample.figures;
 import javafx.scene.image.ImageView;
 import sample.board.Field;

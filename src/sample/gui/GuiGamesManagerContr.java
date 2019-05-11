@@ -1,3 +1,9 @@
+/**
+ * Trieda reprezentujúca controller pre grafický návrh v gamemanager.fxml.
+ * @author Ján Folenta
+ * @author Jozef Ondria
+ */
+
 package sample.gui;
 
 import javafx.collections.ObservableList;
