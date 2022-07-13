@@ -1,6 +1,5 @@
 /**
  * Trieda reprezentujúca controller pre grafický návrh v gamemanager.fxml.
- * @author Ján Folenta
  * @author Jozef Ondria
  */
 
