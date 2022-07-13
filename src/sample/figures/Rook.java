@@ -1,6 +1,5 @@
 /**
  * Trieda reprezentujúca figúrku veže.
- * @author Ján Folenta
  * @author Jozef Ondria
  */
 
