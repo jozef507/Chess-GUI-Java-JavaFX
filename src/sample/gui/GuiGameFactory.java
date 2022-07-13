@@ -1,6 +1,5 @@
 /**
  * Trieda graficky vytvorí potrebné taby pre hru.
- * @author Ján Folenta
  * @author Jozef Ondria
  */
 
