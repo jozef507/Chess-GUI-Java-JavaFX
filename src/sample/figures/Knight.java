@@ -1,6 +1,5 @@
 /**
  * Trieda reprezentujúca figúrku jazdca.
- * @author Ján Folenta
  * @author Jozef Ondria
  */
 
