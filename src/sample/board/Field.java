@@ -1,6 +1,5 @@
 /**
  * Trieda reprezentujúca rozhranie pre poličko šachovnice.
- * @author Ján Folenta
  * @author Jozef Ondria
  */
 
