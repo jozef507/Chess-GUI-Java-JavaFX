@@ -1,6 +1,5 @@
 /**
  * Trieda reprezentujúca aktuálny ťah hry.
- * @author Ján Folenta
  * @author Jozef Ondria
  */
 
