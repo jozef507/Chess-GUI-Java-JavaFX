@@ -1,6 +1,5 @@
 /**
  * Trieda reprezentujúca poličko šachovnice.
- * @author Ján Folenta
  * @author Jozef Ondria
  */
 
