@@ -1,6 +1,5 @@
 /**
  * Trieda reprezentujúca šachovnicu.
- * @author Ján Folenta
  * @author Jozef Ondria
  */
 
