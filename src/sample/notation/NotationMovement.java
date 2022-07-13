@@ -1,6 +1,5 @@
 /**
  * Trieda reprezentujúca notáciu jedneho ťahu hry/partie.
- * @author Ján Folenta
  * @author Jozef Ondria
  */
 
