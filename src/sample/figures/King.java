@@ -1,6 +1,5 @@
 /**
  * Trieda reprezentujúca figúrku kráľa.
- * @author Ján Folenta
  * @author Jozef Ondria
  */
 
