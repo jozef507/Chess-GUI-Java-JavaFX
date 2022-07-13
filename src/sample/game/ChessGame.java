@@ -1,6 +1,5 @@
 /**
  * Trieda reprezentujúca jadro(logiku) aplikácie.
- * @author Ján Folenta
  * @author Jozef Ondria
  */
 
