@@ -1,6 +1,5 @@
 /**
  * Trieda reprezentujúca notáciu hry/partie.
- * @author Ján Folenta
  * @author Jozef Ondria
  */
 
