@@ -1,6 +1,5 @@
 /**
  * Trieda reprezentujúca rozhranie pre jadro(logiku) aplikácie.
- * @author Ján Folenta
  * @author Jozef Ondria
  */
 
