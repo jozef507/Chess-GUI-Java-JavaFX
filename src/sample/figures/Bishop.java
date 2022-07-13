@@ -1,6 +1,5 @@
 /**
  * Trieda reprezentujúca figúrku strelca.
- * @author Ján Folenta
  * @author Jozef Ondria
  */
 
