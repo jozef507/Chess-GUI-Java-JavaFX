@@ -1,6 +1,5 @@
 /**
  * Trieda reprezentujúca rozhranie pre figúrky.
- * @author Ján Folenta
  * @author Jozef Ondria
  */
 
