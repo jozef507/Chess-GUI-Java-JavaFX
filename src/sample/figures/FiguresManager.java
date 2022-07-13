@@ -1,6 +1,5 @@
 /**
  * Trieda reprezentujúca manažéra aktívnych/pasívnych figúrok.
- * @author Ján Folenta
  * @author Jozef Ondria
  */
 
