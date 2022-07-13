@@ -1,6 +1,5 @@
 /**
  * Trieda reprezentujúca figúrku pešiaka.
- * @author Ján Folenta
  * @author Jozef Ondria
  */
 
