@@ -1,6 +1,5 @@
 /**
  * Trieda reprezentujúca figúrku dámy.
- * @author Ján Folenta
  * @author Jozef Ondria
  */
 
